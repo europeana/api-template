@@ -10,11 +10,11 @@
     </parent>
 
     <groupId>eu.europeana.api</groupId>
-    <artifactId>myapi</artifactId>
+    <artifactId>api-template</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>myapi</name>
+    <name>API template</name>
     <description>Template for creating a new Spring-Boot2 API</description>
 
     <properties>
