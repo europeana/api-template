@@ -19,7 +19,7 @@ Either select the `MyApiApplication` class in your IDE and 'run' it
 or 
 
 go to the application root where the pom.xml is located and excute  
-`./mvnw spring-boot:run` (Linux) or `mvnw.cmd spring-boot:run` (Windows)
+`./mvnw spring-boot:run` (Linux, Mac OS) or `mvnw.cmd spring-boot:run` (Windows)
 
 
 ## License
