@@ -3,6 +3,7 @@ package eu.europeana.api.myapi.exception;
 import io.micrometer.core.instrument.util.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.owasp.encoder.Encode;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,6 +48,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler
     public void handleInputValidationError(ConstraintViolationException e, HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value(), StringEscapeUtils.escapeJson(e.getMessage()));
+        response.sendError(HttpStatus.BAD_REQUEST.value(), Encode.forHtml(StringEscapeUtils.escapeJson(e.getMessage())));
     }
 }
