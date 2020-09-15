@@ -7,7 +7,7 @@ Spring-Boot2 web application for .....<describe purpose>
  * Maven<sup>*</sup> 
  * [Europeana parent pom](https://github.com/europeana/europeana-parent-pom)
  
- <sup>* A Maven installation is recommended, but you could use the accompanying `mvnw` (Linux) or `mvnw.cmd` (Windows) 
+ <sup>* A Maven installation is recommended, but you could use the accompanying `mvnw` (Linux, Mac OS) or `mvnw.cmd` (Windows) 
  files instead.
  
 ## Run
