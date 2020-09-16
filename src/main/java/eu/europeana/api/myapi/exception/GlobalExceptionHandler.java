@@ -46,8 +46,11 @@ public class GlobalExceptionHandler {
      * @param response the response that is sent back
      * @throws IOException when there's an exception sending back the response
      */
+    @SuppressWarnings("findsecbugs:XSS_SERVLET")
+    // Safest would be to use Owasp's Encode.forJavasScript(e.getMessage) but that translates characters such as ' to \\x27
+    // Since we are in control (mostly) of the generated error messages we'll settle for now for simple escaping
     @ExceptionHandler
     public void handleInputValidationError(ConstraintViolationException e, HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value(), Encode.forHtml(StringEscapeUtils.escapeJson(e.getMessage())));
+        response.sendError(HttpStatus.BAD_REQUEST.value(), StringEscapeUtils.escapeJson(e.getMessage()));
     }
 }
