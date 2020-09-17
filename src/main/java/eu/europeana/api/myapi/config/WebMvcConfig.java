@@ -2,6 +2,7 @@ package eu.europeana.api.myapi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -13,22 +14,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig {
 
-    /**
-     * Sep 2020: for unknown reason CORS for OPTIONS requests only works properly when CORS Mappings are defined in a bean
-     */
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public WebMvcConfigurer webConfigurer() {
         return new WebMvcConfigurer() {
 
             /**
              * Setup CORS for all requests.
-             * Note that this doesn't work for the Swagger endpoint
              */
+            // Sep 2020: for unknown reason CORS for OPTIONS requests only works properly when CORS Mappings are defined
+            // in a WebMvcConfigurer bean. Also we have to explicitly specify OPTIONS in the allowed methods.
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("*")
-                        .allowedMethods("GET", "HEAD", "OPTIONS")
+                        .allowedMethods(HttpMethod.GET.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name())
                         .maxAge(1000L);
             }
 

@@ -72,7 +72,7 @@ public class CorsConfigTest {
                 // There seems to be a bug in Spring-Boot and OPTIONS requests with Origin AND
                 // Access-Control-Request-Method header will fail (see also https://stackoverflow.com/q/54000519)
                 .header(HttpHeaders.ORIGIN, "https://test.com")
-                //.header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
                 .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, HttpHeaders.AUTHORIZATION)
         ));
     }

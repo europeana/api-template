@@ -22,11 +22,11 @@ public class SwaggerConfigTest {
     private MockMvc mockMvc;
 
     /**
-     * Test if the api-docs endpoint is available and if CORS is enabled for it
+     * Test if the /v3/api-docs endpoint is available and if CORS is enabled for it
      */
     @Test
     public void testApiDocEndpoint() throws Exception {
-        mockMvc.perform(get("/v2/api-docs")
+        mockMvc.perform(get("/v3/api-docs")
                 .header(HttpHeaders.ORIGIN, "https://test.com"))
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andExpect(header().exists(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN))
@@ -43,7 +43,7 @@ public class SwaggerConfigTest {
      */
     @Test
     public void testSwaggerUI() throws Exception {
-        mockMvc.perform(get("/swagger-ui.html"))
+        mockMvc.perform(get("/swagger-ui/"))
                 .andExpect(status().is(HttpStatus.OK.value()));
     }
 
