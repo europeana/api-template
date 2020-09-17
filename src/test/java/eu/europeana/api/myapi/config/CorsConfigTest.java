@@ -55,9 +55,26 @@ public class CorsConfigTest {
      */
     @Test
     public void testCORSOptions() throws Exception {
-        // normal (200 response) request
+        // typical Europeana Portal request (with 200 response)
         testNormalResponse(mockMvc.perform(options("/myApi/{someRequest}", "123test")
-                .header(HttpHeaders.ORIGIN, "https://test.com")));
+                .header(HttpHeaders.CONNECTION, "keep-alive")
+                .header(HttpHeaders.PRAGMA, "no-cache")
+                .header(HttpHeaders.CACHE_CONTROL, "no-cache")
+                .header(HttpHeaders.ACCEPT, "*/*")
+                .header("Sec-Fetch-Mode", "cors")
+                .header("Sec-Fetch-Site", "same-site")
+                .header("Sec-Fetch-Dest", "empty")
+                .header(HttpHeaders.REFERER, "https://www.europeana.eu/en/set/5")
+                .header(HttpHeaders.USER_AGENT, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36")
+                .header(HttpHeaders.ACCEPT_LANGUAGE, "en-GB,en;q=0.9,nl;q=0.8")
+                .header("dnt", "1")
+
+                // There seems to be a bug in Spring-Boot and OPTIONS requests with Origin AND
+                // Access-Control-Request-Method header will fail (see also https://stackoverflow.com/q/54000519)
+                .header(HttpHeaders.ORIGIN, "https://test.com")
+                //.header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, HttpHeaders.AUTHORIZATION)
+        ));
     }
 
     private void testNormalResponse(ResultActions actions) throws Exception {
