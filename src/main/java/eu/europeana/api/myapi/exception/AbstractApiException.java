@@ -3,13 +3,22 @@ package eu.europeana.api.myapi.exception;
 /**
  * Base error class for this application. All other application errors should extend this class
  */
-public class MyApiException extends Exception {
+public abstract class AbstractApiException extends Exception {
 
-    public MyApiException(String msg, Throwable t) {
+    /**
+     * Initialise a new exception
+     * @param msg error message
+     * @param t root cause exception
+     */
+    public AbstractApiException(String msg, Throwable t) {
         super(msg, t);
     }
 
-    public MyApiException(String msg) {
+    /**
+     * Initialise a new exception for which there is no root cause
+     * @param msg error message
+     */
+    public AbstractApiException(String msg) {
         super(msg);
     }
 

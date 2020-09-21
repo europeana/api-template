@@ -51,7 +51,7 @@ public class CorsConfigTest {
     }
 
     /**
-     * Test if CORS works for Options normal requests and error requests
+     * Test if CORS works for Options (Preflight) request
      */
     @Test
     public void testCORSOptions() throws Exception {
@@ -68,9 +68,6 @@ public class CorsConfigTest {
                 .header(HttpHeaders.USER_AGENT, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36")
                 .header(HttpHeaders.ACCEPT_LANGUAGE, "en-GB,en;q=0.9,nl;q=0.8")
                 .header("dnt", "1")
-
-                // There seems to be a bug in Spring-Boot and OPTIONS requests with Origin AND
-                // Access-Control-Request-Method header will fail (see also https://stackoverflow.com/q/54000519)
                 .header(HttpHeaders.ORIGIN, "https://test.com")
                 .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
                 .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, HttpHeaders.AUTHORIZATION)

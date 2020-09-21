@@ -3,7 +3,6 @@ package eu.europeana.api.myapi.exception;
 import io.micrometer.core.instrument.util.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.owasp.encoder.Encode;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,10 +22,10 @@ public class GlobalExceptionHandler {
     /**
      * Checks if we should log an error and rethrows it
      * @param e caught exception
-     * @throws MyApiException rethrown exception
+     * @throws AbstractApiException rethrown exception
      */
-    @ExceptionHandler(MyApiException.class)
-    public void handleBaseException(MyApiException e) throws MyApiException {
+    @ExceptionHandler(AbstractApiException.class)
+    public void handleBaseException(AbstractApiException e) throws AbstractApiException {
         if (e.doLog()) {
             if (e.doLogStacktrace()) {
                 LOG.error("Caught exception", e);

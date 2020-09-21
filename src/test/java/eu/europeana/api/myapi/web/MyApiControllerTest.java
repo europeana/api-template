@@ -41,4 +41,11 @@ public class MyApiControllerTest {
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
     }
 
+    @Test
+    public void testMyControllerError() throws Exception {
+        mockMvc.perform(get("/myApi/error", "123-test")
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().is(HttpStatus.I_AM_A_TEAPOT.value()));
+    }
+
 }

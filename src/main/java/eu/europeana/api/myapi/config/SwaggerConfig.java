@@ -22,10 +22,18 @@ public class SwaggerConfig {
 
     private BuildInfo buildInfo;
 
+    /**
+     * Initialize Swagger with API build information
+     * @param buildInfo object for retrieving build information
+     */
     public SwaggerConfig(BuildInfo buildInfo) {
         this.buildInfo = buildInfo;
     }
 
+    /**
+     * Initialize Swagger Documentation
+     * @return Swagger Docket for this API
+     */
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
