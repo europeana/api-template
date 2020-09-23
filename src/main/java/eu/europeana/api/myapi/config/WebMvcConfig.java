@@ -14,15 +14,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     /**
-     * Setup CORS for all requests.
+     * Setup CORS for all GET, HEAD and OPTIONS, requests.
      */
-    // Sep 2020: for unknown reason CORS for OPTIONS requests only works properly when CORS Mappings are defined
-    // in a WebMvcConfigurer bean. Also we have to explicitly specify OPTIONS in the allowed methods.
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods(HttpMethod.GET.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name())
+                .allowedHeaders("*")
                 .maxAge(1000L); // in seconds
     }
 

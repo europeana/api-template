@@ -20,7 +20,7 @@ import java.util.Collections;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    private BuildInfo buildInfo;
+    private final BuildInfo buildInfo;
 
     /**
      * Initialize Swagger with API build information

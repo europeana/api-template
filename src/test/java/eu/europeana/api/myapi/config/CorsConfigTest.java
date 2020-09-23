@@ -1,13 +1,19 @@
 package eu.europeana.api.myapi.config;
 
+import eu.europeana.api.myapi.exception.DummyException;
+import eu.europeana.api.myapi.web.MyApiController;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,8 +25,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class CorsConfigTest {
 
+    private static final String TEST_OK = "test-ok";
+    private static final String TEST_ERROR = "test-error";
+
+    @MockBean
+    MyApiController myApiController;
+
     @Autowired
     private MockMvc mockMvc;
+
+    @BeforeEach
+    private void setup() {
+        when(myApiController.handleMyApiRequest(TEST_OK)).thenReturn("This test works");
+        when(myApiController.handleMyApiRequest(TEST_ERROR)).thenAnswer((Answer) invocation -> {
+            throw new DummyException("a test error");
+        });
+    }
+
+    private void testNormalResponse(ResultActions actions) throws Exception {
+        actions.andExpect(status().isOk())
+                .andExpect(header().exists(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN))
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
+    }
+
+    private void testErrorResponse(ResultActions actions) throws Exception {
+        actions.andExpect(status().isIAmATeapot())
+                .andExpect(header().exists(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN))
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
+    }
 
     /**
      * Test if CORS works for GET normal requests and error requests
@@ -28,11 +60,11 @@ public class CorsConfigTest {
     @Test
     public void testCORSGet() throws Exception {
         // normal (200 response) request
-        testNormalResponse(mockMvc.perform(get("/myApi/{someRequest}", "123test")
+        testNormalResponse(mockMvc.perform(get("/myApi/{someRequest}", TEST_OK)
                 .header(HttpHeaders.ORIGIN, "https://test.com")));
 
         // error request
-       testErrorResponse(mockMvc.perform(get("/myApi/{someRequest}", "123-test")
+       testErrorResponse(mockMvc.perform(get("/myApi/{someRequest}", TEST_ERROR)
                 .header(HttpHeaders.ORIGIN, "https://test.com")));
     }
 
@@ -42,11 +74,11 @@ public class CorsConfigTest {
     @Test
     public void testCORSHead() throws Exception {
         // normal (200 response) request
-        testNormalResponse(mockMvc.perform(head("/myApi/{someRequest}", "123test")
+        testNormalResponse(mockMvc.perform(head("/myApi/{someRequest}", TEST_OK)
                 .header(HttpHeaders.ORIGIN, "https://test.com")));
 
         // error request
-        testErrorResponse(mockMvc.perform(head("/myApi/{someRequest}", "123-test")
+        testErrorResponse(mockMvc.perform(head("/myApi/{someRequest}", TEST_ERROR)
                 .header(HttpHeaders.ORIGIN, "https://test.com")));
     }
 
@@ -56,7 +88,7 @@ public class CorsConfigTest {
     @Test
     public void testCORSOptions() throws Exception {
         // typical Europeana Portal request (with 200 response)
-        testNormalResponse(mockMvc.perform(options("/myApi/{someRequest}", "123test")
+        testNormalResponse(mockMvc.perform(options("/myApi/{someRequest}", TEST_OK)
                 .header(HttpHeaders.CONNECTION, "keep-alive")
                 .header(HttpHeaders.PRAGMA, "no-cache")
                 .header(HttpHeaders.CACHE_CONTROL, "no-cache")
@@ -72,18 +104,6 @@ public class CorsConfigTest {
                 .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
                 .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, HttpHeaders.AUTHORIZATION)
         ));
-    }
-
-    private void testNormalResponse(ResultActions actions) throws Exception {
-        actions.andExpect(status().isOk())
-                .andExpect(header().exists(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN))
-                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
-    }
-
-    private void testErrorResponse(ResultActions actions) throws Exception {
-        actions.andExpect(status().isBadRequest())
-                .andExpect(header().exists(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN))
-                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"));
     }
 
 }

@@ -29,20 +29,21 @@ public final class SocksProxyActivator {
      * @return true if it was activated, false if no socks settings or a "enabled=false" setting was found
      */
     public static boolean activate(SocksProxyConfig config) {
-        if (isValidConfiguration(config)) {
-            System.setProperty("socksProxyHost", config.getHost());
-            System.setProperty("socksProxyPort", config.getPort());
-
-            String user = config.getUser();
-            if (StringUtils.isNotBlank(user)) {
-                String pass = config.getPassword();
-                System.setProperty("java.net.socks.username", user);
-                System.setProperty("java.net.socks.password", pass);
-                Authenticator.setDefault(new SockProxyAuthenticator(user, pass));
-            }
-            return true;
+        if (!isValidConfiguration(config)) {
+            return false;
         }
-        return false;
+
+        System.setProperty("socksProxyHost", config.getHost());
+        System.setProperty("socksProxyPort", config.getPort());
+
+        String user = config.getUser();
+        if (StringUtils.isNotBlank(user)) {
+            String pass = config.getPassword();
+            System.setProperty("java.net.socks.username", user);
+            System.setProperty("java.net.socks.password", pass);
+            Authenticator.setDefault(new SockProxyAuthenticator(user, pass));
+        }
+        return true;
     }
 
     /**
@@ -65,8 +66,8 @@ public final class SocksProxyActivator {
 
     private static class SockProxyAuthenticator extends Authenticator {
 
-        private String user;
-        private char[] password;
+        private final String user;
+        private final char[] password;
 
         SockProxyAuthenticator(String user, String password) {
             this.user = user;
