@@ -40,9 +40,10 @@ public class MyApiController {
      */
     @GetMapping(value = "myApi/error")
     public void generateError(HttpServletRequest request) throws AbstractApiException {
-        if (request.getParameterMap().containsKey("trace")) {
-            throw new DummyException("This is an error with stacktrace");
+        if (request.getParameterMap().containsKey("trace") || request.getParameterMap().containsKey("debug")) {
+            throw new DummyException("This is an error with stacktrace", "MyErrorCode");
         }
-        throw new DummyException("This is an error. You can see a stacktrace if you add a 'trace' parameter");
+        throw new DummyException("This is an error. You can see a stacktrace if you add a 'trace' or 'debug' parameter",
+                "MyErrorCode");
     }
 }

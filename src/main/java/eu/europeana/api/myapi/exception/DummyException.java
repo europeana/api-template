@@ -18,6 +18,15 @@ public class DummyException extends AbstractApiException {
     }
 
     /**
+     * Initialise a new exception for which there is no root cause
+     * @param msg error message
+     * @param errorCode error code
+     */
+    public DummyException(String msg, String errorCode) {
+        super(msg, errorCode);
+    }
+
+    /**
      * We don't want to log the stack trace for this exception
      * @return false
      */

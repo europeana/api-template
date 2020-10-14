@@ -5,13 +5,26 @@ package eu.europeana.api.myapi.exception;
  */
 public abstract class AbstractApiException extends Exception {
 
+    private final String errorCode;
+
     /**
      * Initialise a new exception
      * @param msg error message
      * @param t root cause exception
      */
     public AbstractApiException(String msg, Throwable t) {
+        this(msg, null, t);
+    }
+
+    /**
+     * Initialise a new exception with error code
+     * @param msg error message
+     * @param errorCode error code (optional)
+     * @param t root cause exception
+     */
+    public AbstractApiException(String msg, String errorCode, Throwable t) {
         super(msg, t);
+        this.errorCode = errorCode;
     }
 
     /**
@@ -20,6 +33,17 @@ public abstract class AbstractApiException extends Exception {
      */
     public AbstractApiException(String msg) {
         super(msg);
+        this.errorCode = null;
+    }
+
+    /**
+     * Initialise a new exception with error code for which there is no root cause
+     * @param msg error message
+     * @param errorCode error code (optional)
+     */
+    public AbstractApiException(String msg, String errorCode) {
+        super(msg);
+        this.errorCode = errorCode;
     }
 
     /**
@@ -39,6 +63,13 @@ public abstract class AbstractApiException extends Exception {
      */
     public boolean doLogStacktrace() {
         return true;
+    }
+
+    /**
+     * @return the error code that was optionally provided when creating this exception
+     */
+    public String getErrorCode() {
+        return this.errorCode;
     }
 
 }
