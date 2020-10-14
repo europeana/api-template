@@ -81,6 +81,12 @@
             <version>${swagger.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>eu.europeana.api.commons</groupId>
+            <artifactId>commons-error</artifactId>
+            <version>0.2.11-SNAPSHOT</version>
+        </dependency>
+
         <!-- for securing (error) output -->
         <dependency>
             <groupId>org.owasp.encoder</groupId>
