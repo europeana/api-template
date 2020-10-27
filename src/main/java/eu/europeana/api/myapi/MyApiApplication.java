@@ -11,7 +11,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 /**
  * Main application. Allows deploying as a war and logs instance data when deployed in Cloud Foundry
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "eu.europeana.api")
 public class MyApiApplication extends SpringBootServletInitializer {
 
     /**

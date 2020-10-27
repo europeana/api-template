@@ -1,6 +1,6 @@
 package eu.europeana.api.myapi.web;
 
-import eu.europeana.api.myapi.exception.AbstractApiException;
+import eu.europeana.api.commons.error.EuropeanaApiException;
 import eu.europeana.api.myapi.exception.DummyException;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -36,13 +36,14 @@ public class MyApiController {
     /**
      * Test endpoint that throws an error and returns a 418 response
      * @param request incoming request
-     * @throws AbstractApiException thrown always
+     * @throws EuropeanaApiException thrown always
      */
     @GetMapping(value = "myApi/error")
-    public void generateError(HttpServletRequest request) throws AbstractApiException {
-        if (request.getParameterMap().containsKey("trace")) {
-            throw new DummyException("This is an error with stacktrace");
+    public void generateError(HttpServletRequest request) throws EuropeanaApiException {
+        if (request.getParameterMap().containsKey("trace") || request.getParameterMap().containsKey("debug")) {
+            throw new DummyException("This is an error with stacktrace", "MyErrorCode");
         }
-        throw new DummyException("This is an error. You can see a stacktrace if you add a 'trace' parameter");
+        throw new DummyException("This is an error. You can see a stacktrace if you add a 'trace' or 'debug' parameter",
+                "MyErrorCode");
     }
 }

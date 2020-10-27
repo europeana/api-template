@@ -81,6 +81,12 @@
             <version>${swagger.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>eu.europeana.api.commons</groupId>
+            <artifactId>commons-error</artifactId>
+            <version>0.2.11-SNAPSHOT</version>
+        </dependency>
+
         <!-- for securing (error) output -->
         <dependency>
             <groupId>org.owasp.encoder</groupId>
@@ -107,6 +113,28 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- For testing error response contents (not possible with MockMvc)-->
+        <!-- This issue https://github.com/rest-assured/rest-assured/issues/1175 prevent us from upgrading to 4.3.1 -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>4.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>4.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>xml-path</artifactId>
+            <version>4.2.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 
