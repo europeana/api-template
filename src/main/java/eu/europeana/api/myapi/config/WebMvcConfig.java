@@ -22,6 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods(HttpMethod.GET.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name())
                 .allowedHeaders("*")
+                .allowCredentials(false)
                 .maxAge(1000L); // in seconds
     }
 
