@@ -29,6 +29,7 @@ public class MyApiApplication extends SpringBootServletInitializer {
         // Activate socks proxy (if your application requires it)
         SocksProxyActivator.activate(new SocksProxyConfig("myapi.properties", "myapi.user.properties"));
 
+        // TODO validate command-line args before passing on, or pass on null instead
         SpringApplication.run(MyApiApplication.class, args);
     }
 

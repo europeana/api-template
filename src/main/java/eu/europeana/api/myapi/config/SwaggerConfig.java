@@ -48,7 +48,7 @@ public class SwaggerConfig {
         return new ApiInfo(
                 buildInfo.getAppName(),
                 buildInfo.getAppDescription(),
-                buildInfo.getAppVersion() + "(build " + buildInfo.getBuildNumber() + ")",
+                buildInfo.getAppVersion() + " (build " + buildInfo.getBuildNumber() + ")",
                 null,
                 new Contact("API team", "https://api.europeana.eu", "api@europeana.eu"),
                 "EUPL 1.2", "https://www.eupl.eu", Collections.emptyList());
