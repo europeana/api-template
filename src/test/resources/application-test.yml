@@ -1,7 +1,7 @@
 server:
   error:
     include-message: on_param
-    include-stacktrace: on_trace_param
+    include-stacktrace: on_param
     include-exception: true
 
   compression:
