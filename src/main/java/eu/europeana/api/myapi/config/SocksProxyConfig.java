@@ -17,11 +17,12 @@ import java.util.Properties;
  */
 public class SocksProxyConfig {
 
-    private static final String SOCKS_ENABLED = "socks.enabled";
-    private static final String SOCKS_HOST    = "socks.host";
-    private static final String SOCKS_PORT    = "socks.port";
-    private static final String SOCKS_USER    = "socks.user";
-    private static final String SOCKS_PASS    = "socks.password";
+    private static final String SOCKS_ENABLED       = "socks.enabled";
+    private static final String SOCKS_HOST          = "socks.host";
+    private static final String SOCKS_PORT          = "socks.port";
+    private static final String SOCKS_USER          = "socks.user";
+    private static final String SOCKS_PASS          = "socks.password";
+    private static final String SOCKS_NONPROXYHOSTS = "socks.nonProxyHosts";
 
     private static final Logger LOG = LogManager.getLogger(SocksProxyConfig.class);
 
@@ -69,5 +70,13 @@ public class SocksProxyConfig {
 
     public String getPassword() {
         return props.getProperty(SOCKS_PASS);
+    }
+
+    /**
+     * List of pipe-separated hosts for which communication should not go via the Socks Proxy
+     * @return
+     */
+    public String getNonProxyhosts() {
+        return props.getProperty(SOCKS_NONPROXYHOSTS);
     }
 }

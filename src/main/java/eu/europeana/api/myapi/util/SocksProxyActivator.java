@@ -41,6 +41,11 @@ public final class SocksProxyActivator {
             String pass = config.getPassword();
             System.setProperty("java.net.socks.username", user);
             System.setProperty("java.net.socks.password", pass);
+            String nonProxyHosts = config.getNonProxyhosts();
+            if (StringUtils.isNotBlank(nonProxyHosts)) {
+                // undocumented Java feature, see also https://stackoverflow.com/questions/25445875/
+                System.setProperty("socksNonProxyHosts", nonProxyHosts);
+            }
             Authenticator.setDefault(new SockProxyAuthenticator(user, pass));
         }
         return true;
@@ -58,7 +63,7 @@ public final class SocksProxyActivator {
         } else if (!config.isSocksEnabled()) {
             LOG.info("Socks proxy disabled");
         } else {
-            LOG.info("Setting up socks proxy at {}", config.getHost());
+            LOG.info("Setting up socks proxy at {}. Non-proxy hosts are {}", config.getHost(), config.getNonProxyhosts());
             result = true;
         }
         return result;
