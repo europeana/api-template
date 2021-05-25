@@ -28,3 +28,4 @@ build/
 .vscode/
 
 **/*.user.properties
+**/google_cloud_credentials.json
