@@ -12,11 +12,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * JUnit test to check if Swagger is setup fine
+ * JUnit test to check if OpenAPI and SpringDoc is setup okay
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SwaggerConfigTest {
+public class SpringDocConfigTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,12 +39,12 @@ public class SwaggerConfigTest {
     }
 
     /**
-     * Test if Swagger UI is available
+     * Test if UI is available via /console path
      */
     @Test
-    public void testSwaggerUI() throws Exception {
-        mockMvc.perform(get("/swagger-ui/"))
-                .andExpect(status().is(HttpStatus.OK.value()));
+    public void testConsole() throws Exception {
+        mockMvc.perform(get("/console"))
+                .andExpect(status().is(HttpStatus.FOUND.value()));
     }
 
 }
