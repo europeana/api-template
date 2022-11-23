@@ -48,7 +48,7 @@ public class ApiErrorAttributesTest {
         assertTrue(response.getString("timestamp").contains("T"));
         assertEquals(HttpStatus.I_AM_A_TEAPOT.value(), response.getInt("status"));
         assertEquals("I'm a teapot", response.getString("error"));
-        assertTrue(response.getString("message").isEmpty());
+        assertNull(response.getString("message"));
         assertEquals(path, response.getString("path"));
         assertNull(response.getString("trace"));
     }
