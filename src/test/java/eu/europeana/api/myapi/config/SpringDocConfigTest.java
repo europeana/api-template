@@ -43,8 +43,11 @@ public class SpringDocConfigTest {
      */
     @Test
     public void testConsole() throws Exception {
+        // console should forward to /swagger-ui/index.html
         mockMvc.perform(get("/console"))
                 .andExpect(status().is(HttpStatus.FOUND.value()));
+        mockMvc.perform(get("/swagger-ui/index.html"))
+                .andExpect(status().is(HttpStatus.OK.value()));
     }
 
 }
