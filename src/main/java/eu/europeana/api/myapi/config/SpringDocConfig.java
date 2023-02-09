@@ -8,6 +8,9 @@ import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Setup SpringDoc swagger console
+ */
 @Configuration
 public class SpringDocConfig {
 
@@ -21,6 +24,10 @@ public class SpringDocConfig {
         this.buildInfo = buildInfo;
     }
 
+    /**
+     * Generate basic application info
+     * @return
+     */
     @Bean
     public OpenAPI userServiceOpenAPI() {
         return new OpenAPI().info(new Info().title(buildInfo.getAppName())
