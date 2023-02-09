@@ -24,8 +24,8 @@
 
         <api-commons.version>0.2.11</api-commons.version>
 
-        <spring-boot.version>2.6.13</spring-boot.version>
-        <springdoc.version>1.6.13</springdoc.version>
+        <spring-boot.version>2.7.8</spring-boot.version>
+        <springdoc.version>1.6.14</springdoc.version>
     </properties>
 
     <dependencyManagement>
