@@ -19,7 +19,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <spring-boot.version>2.7.12</spring-boot.version>
+        <spring-boot.version>2.7.13</spring-boot.version>
         <springdoc.version>1.7.0</springdoc.version>
         <api-commons.version>0.2.11</api-commons.version>
 
