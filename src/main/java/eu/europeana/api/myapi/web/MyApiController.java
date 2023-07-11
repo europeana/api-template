@@ -30,7 +30,7 @@ public class MyApiController {
     public String handleMyApiRequest(
         @PathVariable(value = "someRequest")
             @Pattern(regexp = MY_REGEX, message = INVALID_REQUEST_MESSAGE) String someRequest) {
-        return "It works!";
+        return "You said: " + someRequest + "! It works!";
     }
 
     /**
