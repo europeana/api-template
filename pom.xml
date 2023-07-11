@@ -155,6 +155,7 @@
                     <suppressionFiles>
                         <suppressionFile>owasp-suppress.xml</suppressionFile>
                     </suppressionFiles>
+                    <knownExploitedUrl>http://artifactory.eanadev.org/artifactory/ext-release-local/gov/cisa/www/known_exploited_vulnerabilities.json</knownExploitedUrl>
                 </configuration>
                 <executions>
                     <execution>
