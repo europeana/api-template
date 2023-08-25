@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * JUnit test for testing if the /actuator/info endpoint is available
+ * JUnit test for testing if the /info and /health actuator endpoints are available
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -27,6 +27,30 @@ public class ActuatorTest {
                 .andExpect(status().is(HttpStatus.OK.value())).andReturn();
         // also check that there are contents
         assert result.getResponse().getContentAsString().contains("app");
+    }
+
+    @Test
+    public void testActuatorHealth() throws Exception {
+        MvcResult result = mockMvc.perform(get("/actuator/health"))
+                .andExpect(status().is(HttpStatus.OK.value())).andReturn();
+        // also check that there are contents
+        assert result.getResponse().getContentAsString().contains("UP");
+    }
+
+    @Test
+    public void testActuatorHealthLiveness() throws Exception {
+        MvcResult result = mockMvc.perform(get("/actuator/health/liveness"))
+                .andExpect(status().is(HttpStatus.OK.value())).andReturn();
+        // also check that there are contents
+        assert result.getResponse().getContentAsString().contains("UP");
+    }
+
+    @Test
+    public void testActuatorHealthReadiness() throws Exception {
+        MvcResult result = mockMvc.perform(get("/actuator/health/readiness"))
+                .andExpect(status().is(HttpStatus.OK.value())).andReturn();
+        // also check that there are contents
+        assert result.getResponse().getContentAsString().contains("UP");
     }
 
 }
