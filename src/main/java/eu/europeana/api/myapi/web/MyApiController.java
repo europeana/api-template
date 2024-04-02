@@ -1,6 +1,6 @@
 package eu.europeana.api.myapi.web;
 
-import eu.europeana.api.commons.error.EuropeanaApiException;
+import eu.europeana.api.commons_sb3.error.EuropeanaApiException;
 import eu.europeana.api.myapi.exception.DummyException;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Pattern;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * Example Rest Controller class with input validation
@@ -18,19 +18,19 @@ import javax.validation.constraints.Pattern;
 @Validated
 public class MyApiController {
 
-    private static final String MY_REGEX = "^[a-zA-Z0-9_]*$";
+    private static final String MY_REGEX = "^[a-zA-Z0-9]*$";
     private static final String INVALID_REQUEST_MESSAGE = "Invalid parameter.";
 
     /**
      * Test endpoint
-     * @param someRequest an alpha-numerical String
+     * @param somePath an alpha-numeric String
      * @return just something, doesn't matter what
      */
-    @GetMapping(value = "/myApi/{someRequest}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/myApi/{path}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String handleMyApiRequest(
-        @PathVariable(value = "someRequest")
-            @Pattern(regexp = MY_REGEX, message = INVALID_REQUEST_MESSAGE) String someRequest) {
-        return "You said: " + someRequest + "! It works!";
+        @PathVariable(value = "path")
+            @Pattern(regexp = MY_REGEX, message = INVALID_REQUEST_MESSAGE) String somePath) {
+        return "{ \"You requested\": \"" + somePath + "\" }";
     }
 
     /**
@@ -38,7 +38,7 @@ public class MyApiController {
      * @param request incoming request
      * @throws EuropeanaApiException thrown always
      */
-    @GetMapping(value = "myApi/error")
+    @GetMapping(value = "myApi/dummyError")
     public void generateError(HttpServletRequest request) throws EuropeanaApiException {
         if (request.getParameterMap().containsKey("trace") || request.getParameterMap().containsKey("debug")) {
             throw new DummyException("This is an error with stacktrace", "MyErrorCode");

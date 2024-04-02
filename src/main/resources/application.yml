@@ -3,9 +3,9 @@ server.port: 8086
 
 server:
   error:
-    include-message: always
-    include-stacktrace: on_param
-    include-exception: false
+    include-message: always            # with on_param only shown when using 'message' option
+    include-stacktrace: on_param       # with on_param only shown when using 'trace' option
+    include-exception: true
 
   # Enabling http2 should increase performance in most cases, but best to check if it really does
   # Note that it only works when using https.

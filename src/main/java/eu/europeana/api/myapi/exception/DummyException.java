@@ -1,6 +1,6 @@
 package eu.europeana.api.myapi.exception;
 
-import eu.europeana.api.commons.error.EuropeanaApiException;
+import eu.europeana.api.commons_sb3.error.EuropeanaApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * An exception to demonstrate error handling with ResponseStatus annotation
  * It's recommended that all exceptions created in the API extends the EuropeanaApiException
  */
-@ResponseStatus(HttpStatus.BAD_REQUEST)
+@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 public class DummyException extends EuropeanaApiException {
 
     /**

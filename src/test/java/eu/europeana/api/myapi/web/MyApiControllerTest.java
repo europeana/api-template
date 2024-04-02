@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * JUnit test for testing the RecommendController class
+ * Note that mockMvc doesn't allow you to test response contents, so for that we use the ApiErrorAttributesTest
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,16 +37,22 @@ public class MyApiControllerTest {
 
     @Test
     public void testMyControllerInvalidInput() throws Exception {
-        mockMvc.perform(get("/myApi/{someRequest}", "123-test")
+        mockMvc.perform(get("/myApi/{myPath}", "validate-error")
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
     }
 
     @Test
-    public void testMyControllerError() throws Exception {
-        mockMvc.perform(get("/myApi/error", "123-test")
+    public void testMyControllerCustomError() throws Exception {
+        mockMvc.perform(get("/myApi/dummyError")
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().is(HttpStatus.I_AM_A_TEAPOT.value()));
+    }
+
+    @Test
+    public void testMyControllerNotFoundError() throws Exception {
+        mockMvc.perform(get("/not_exists/"))
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
     }
 
 }

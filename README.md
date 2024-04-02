@@ -3,7 +3,7 @@
 Spring-Boot2 web application for .....<describe purpose>
 
 ## Prerequisites
- * Java 11
+ * Java 17
  * Maven<sup>*</sup> 
  * [Europeana parent pom](https://github.com/europeana/europeana-parent-pom)
  
