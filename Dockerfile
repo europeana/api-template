@@ -1,5 +1,5 @@
 # Builds a docker image from a locally built Maven war. Requires 'mvn package' to have been run beforehand
-FROM tomcat:9.0-jre17
+FROM tomcat:10.0-jre17
 LABEL org.opencontainers.image.vendor="Europeana Foundation" \
       org.opencontainers.image.authors="api@europeana.eu" \
       org.opencontainers.image.documentation="https://pro.europeana.eu/page/apis" \
