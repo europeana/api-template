@@ -22,13 +22,13 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <spring-boot.version>3.2.4</spring-boot.version>
-        <springdoc-openapi.version>2.4.0</springdoc-openapi.version>
+        <spring-boot.version>3.3.2</spring-boot.version>
+        <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
         <api-commons.version>0.1.1-SNAPSHOT</api-commons.version>
 
         <rest-assured.version>5.4.0</rest-assured.version>
         <encoder.version>1.2.3</encoder.version>
-        <dependency-check-maven.version>9.2.0</dependency-check-maven.version>
+        <dependency-check-maven.version>10.0.3</dependency-check-maven.version>
     </properties>
 
     <dependencyManagement>
