@@ -43,7 +43,7 @@ management:
 springdoc:
   swagger-ui:
     path: /console
-  # Don't include Error controller in API commons
+  # Don't include Error controller
   paths-to-exclude: /error
 
 

@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <!-- We don't use UriComponentsBuilder -->
+    <!-- Suppress only if you are not using Databinder -->
     <suppress>
-        <notes><![CDATA[
-   file name: spring-web-6.1.5.jar
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-web@.*$</packageUrl>
-        <vulnerabilityName>CVE-2024-22262</vulnerabilityName>
+        <notes><![CDATA[file name: spring-core-6.1.11.jar]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring-core@.*$</packageUrl>
+        <cve>CVE-2024-38820</cve>
+    </suppress>
+    <!-- Suppress only if you are not parsing ETags from If-Match or If-None-Match headers -->
+    <suppress>
+        <notes><![CDATA[file name: spring-web-6.1.11.jar]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring-web@.*$</packageUrl>
+        <vulnerabilityName>CVE-2024-38809</vulnerabilityName>
+    </suppress>
+    <!-- Suppress only if you are using Tomcat or Jetty to run the application, or using the Spring Security firewall -->
+    <suppress>
+        <notes><![CDATA[file name: spring-webmvc-6.1.11.jar]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring-webmvc@.*$</packageUrl>
+        <vulnerabilityName>CVE-2024-38816</vulnerabilityName>
     </suppress>
 </suppressions>
