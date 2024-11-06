@@ -24,7 +24,7 @@
 
         <spring-boot.version>3.3.2</spring-boot.version>
         <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
-        <api-commons.version>0.1.1-SNAPSHOT</api-commons.version>
+        <api-commons.version>0.1.0</api-commons.version>
 
         <rest-assured.version>5.4.0</rest-assured.version>
         <encoder.version>1.2.3</encoder.version>
