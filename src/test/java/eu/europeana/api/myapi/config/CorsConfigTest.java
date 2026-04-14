@@ -1,6 +1,6 @@
 package eu.europeana.api.myapi.config;
 
-import eu.europeana.api.myapi.exception.DummyException;
+import eu.europeana.api.myapi.exception.BasicException;
 import eu.europeana.api.myapi.web.MyApiController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,9 +37,9 @@ public class CorsConfigTest {
 
     @BeforeEach
     private void setup() {
-        when(myApiController.handleMyApiRequest(TEST_OK)).thenReturn("This test works");
-        when(myApiController.handleMyApiRequest(TEST_ERROR)).thenAnswer((Answer) invocation -> {
-            throw new DummyException("a test error");
+        when(myApiController.handleSimpleRequest(TEST_OK)).thenReturn("This test works");
+        when(myApiController.handleSimpleRequest(TEST_ERROR)).thenAnswer((Answer) invocation -> {
+            throw new BasicException("a test error");
         });
     }
 

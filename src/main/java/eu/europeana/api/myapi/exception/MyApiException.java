@@ -5,27 +5,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * An exception to demonstrate error handling with ResponseStatus annotation
- * It's recommended that all exceptions created in the API extends the EuropeanaApiException
+ * An exception to demonstrate custom error handling in your application's GlobalExceptionHandler
+ * It's recommended that all exceptions created in the API extend the EuropeanaApiException
  */
-@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-public class DummyException extends EuropeanaApiException {
+public class MyApiException extends EuropeanaApiException {
 
     /**
      * Initialise a new exception for which there is no root cause
      * @param msg error message
      */
-    public DummyException(String msg) {
+    public MyApiException(String msg) {
         super(msg);
     }
 
     /**
      * Initialise a new exception for which there is no root cause
-     * @param msg error message
+     * @param msg full error message
+     * @param error short error message
      * @param errorCode error code
      */
-    public DummyException(String msg, String errorCode) {
-        super(msg, errorCode);
+    public MyApiException(String msg, String error, String errorCode) {
+        super(msg, error, errorCode);
     }
 
     /**

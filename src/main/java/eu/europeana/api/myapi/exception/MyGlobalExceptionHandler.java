@@ -3,6 +3,8 @@ package eu.europeana.api.myapi.exception;
 import eu.europeana.api.commons_sb3.error.EuropeanaGlobalExceptionHandler;
 import io.micrometer.core.instrument.util.StringEscapeUtils;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +20,8 @@ import java.io.IOException;
 @ControllerAdvice
 public class MyGlobalExceptionHandler extends EuropeanaGlobalExceptionHandler {
 
+    private static final Logger LOG = LogManager.getLogger(MyGlobalExceptionHandler.class);
+
     /**
      * Add ExceptionHandler methods to handle specific error situations if needed
      * @param e dummy exception to handle
@@ -26,9 +30,10 @@ public class MyGlobalExceptionHandler extends EuropeanaGlobalExceptionHandler {
      */
     @ExceptionHandler
     @SuppressWarnings("findsecbugs:XSS_SERVLET") // we control error message and use StringEscapeUtils so very low risk
-    public void handleDummyExceptions(DummyException e, HttpServletResponse response) throws IOException {
-        // do some custom processing here
-        // then either rethrow the error or handle it yourself
+    public void handleDummyExceptions(MyApiException e, HttpServletResponse response) throws IOException {
+        // Do some custom processing here and then either rethrow the error or handle it yourself
+        // Note that by default the error won't be logged if you handle it yourself!
+        LOG.error(e);
         response.sendError(HttpStatus.I_AM_A_TEAPOT.value(), StringEscapeUtils.escapeJson(e.getMessage()));
     }
 

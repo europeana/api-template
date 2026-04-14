@@ -39,7 +39,7 @@ management:
     readinessState:
       enabled: true
 
-# Creates a redirect from /console to /swagger-ui/index.html
+# (Deprecated) Creates a redirect from /console to /swagger-ui/index.html
 springdoc:
   swagger-ui:
     path: /console

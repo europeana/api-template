@@ -21,13 +21,13 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <spring-boot.version>3.3.2</spring-boot.version>
-        <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
-        <api-commons.version>0.1.0</api-commons.version>
+        <!-- Best to use the same spring-boot version as defined in API commons -->
+        <spring-boot.version>3.3.5</spring-boot.version>
+        <api-commons-sb3.version>0.1.3</api-commons-sb3.version>
+
+        <springdoc-openapi.version>2.6.0</springdoc-openapi.version>  <!-- Deprecated -->
 
         <rest-assured.version>5.4.0</rest-assured.version>
-        <encoder.version>1.2.3</encoder.version>
-        <dependency-check-maven.version>10.0.3</dependency-check-maven.version>
     </properties>
 
     <dependencyManagement>
@@ -68,25 +68,24 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
+        <!-- deprecated -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc-openapi.version}</version>
         </dependency>
 
+        <!-- Use commons so we return default error messages -->
         <dependency>
             <groupId>eu.europeana.api</groupId>
             <artifactId>commons-sb3-error</artifactId>
-            <version>${api-commons.version}</version>
+            <version>${api-commons-sb3.version}</version>
         </dependency>
-
-        <!-- for securing (error) output -->
-<!--        <dependency>-->
-<!--            <groupId>org.owasp.encoder</groupId>-->
-<!--            <artifactId>encoder</artifactId>-->
-<!--            <version>${encoder.version}</version>-->
-<!--        </dependency>-->
-
+        <dependency>
+            <groupId>eu.europeana.api</groupId>
+            <artifactId>commons-sb3-oauth</artifactId>
+            <version>${api-commons-sb3.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -128,6 +127,8 @@
             <scope>test</scope>
         </dependency>
 
+
+
     </dependencies>
 
 
@@ -136,30 +137,6 @@
         <finalName>${project.artifactId}</finalName>
 
         <plugins>
-            <plugin>
-                <!-- This will be active when running the verify or install goal
-                     To skip (e.g. during debugging) use 'mvn clean package')-->
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>${dependency-check-maven.version}</version>
-                <configuration>
-                    <nvdApiKeyEnvironmentVariable>NVD_APIKEY</nvdApiKeyEnvironmentVariable>
-                    <!-- see EA-3505 why we host the known exploited vulnerabilties file ourselves -->
-                    <knownExploitedUrl>https://artifactory.eanadev.org/artifactory/ext-release-local/gov/cisa/www/known_exploited_vulnerabilities.json</knownExploitedUrl>
-                    <failBuildOnCVSS>8</failBuildOnCVSS>
-                    <suppressionFiles>
-                        <suppressionFile>owasp-suppress.xml</suppressionFile>
-                    </suppressionFiles>
-               </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
