@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapi-deployment
+  name: api-template-deployment
 spec:
   template:
     spec:
       containers:
-        - name: myapi
+        - name: api-template
           # required to use local image
           imagePullPolicy: Never
