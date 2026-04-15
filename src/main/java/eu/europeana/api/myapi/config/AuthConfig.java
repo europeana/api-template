@@ -151,6 +151,7 @@ public class AuthConfig extends BaseAuthorizationService {
         if (StringUtils.isEmpty(authTokenEndpoint) || StringUtils.isEmpty(authTokenGrantParams)) {
             LOG.warn("Keycloak token endpoint and/or grant parameters are NOT set!");
         } else {
+            clientDetails.setApiKeyServiceUrl(authApiKeyEndpoint);
             AuthenticationConfig config = new AuthenticationConfig(authTokenEndpoint, authTokenGrantParams);
             clientDetails.setAuthHandler(AuthenticationBuilder.newAuthentication(config));
         }

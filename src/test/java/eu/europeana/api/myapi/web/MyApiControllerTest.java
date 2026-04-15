@@ -13,8 +13,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * JUnit test for testing the RecommendController class
- * Note that mockMvc doesn't allow you to test response contents, so for that we use the ApiErrorAttributesTest
+ * JUnit test for testing the MyApiController class
+ * Note that mockMvc doesn't allow you to test response contents, so for that we use RestAssured (see ApiErrorAttributesTest)
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,14 +37,14 @@ public class MyApiControllerTest {
 
     @Test
     public void testMyControllerInvalidInput() throws Exception {
-        mockMvc.perform(get("/myApi/{myPath}", "validate-error")
+        mockMvc.perform(get("/myApi/{myPath}", "validate-error") // dash character not allowed
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
     }
 
     @Test
     public void testMyControllerCustomError() throws Exception {
-        mockMvc.perform(get("/myApi/dummyError")
+        mockMvc.perform(get("/error3")
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().is(HttpStatus.I_AM_A_TEAPOT.value()));
     }

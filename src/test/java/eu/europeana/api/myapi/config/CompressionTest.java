@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * JUnit test to check if compression settings are working.
  * Since compression is only active for responses > 4KB we test with the Swagger endpoint
  */
-@Disabled // TODO tmp disabled because the test doesn't work!?
+@Disabled // TODO tmp disabled because the test doesn't work!? No content-encoding header is sent back
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test") // to load application-test.yml
@@ -27,8 +27,8 @@ public class CompressionTest {
     @Autowired
     private MockMvc mockMvc;
 
-
     @Test
+
     public void testEncodingLargeResponse() throws Exception {
         mockMvc.perform(get("/v3/api-docs")
                 .header(HttpHeaders.ACCEPT_ENCODING, "gzip"))

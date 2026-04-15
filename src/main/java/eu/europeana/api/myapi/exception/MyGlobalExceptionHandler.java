@@ -30,11 +30,12 @@ public class MyGlobalExceptionHandler extends EuropeanaGlobalExceptionHandler {
      */
     @ExceptionHandler
     @SuppressWarnings("findsecbugs:XSS_SERVLET") // we control error message and use StringEscapeUtils so very low risk
-    public void handleDummyExceptions(MyApiException e, HttpServletResponse response) throws IOException {
+    public void handleMyApiExceptions(MyApiException e, HttpServletResponse response) throws IOException {
         // Do some custom processing here and then either rethrow the error or handle it yourself
         // Note that by default the error won't be logged if you handle it yourself!
         LOG.error(e);
         response.sendError(HttpStatus.I_AM_A_TEAPOT.value(), StringEscapeUtils.escapeJson(e.getMessage()));
     }
+
 
 }

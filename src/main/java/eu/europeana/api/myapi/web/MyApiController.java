@@ -17,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -48,7 +45,7 @@ public class MyApiController {
      * @param somePath any alphanumerical string
      * @return string
      */
-    @GetMapping(value = "/{path}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/myApi/{path}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String handleSimpleRequest(
             @PathVariable(value = "path")
             @Pattern(regexp = MY_REGEX, message = INVALID_REQUEST_MESSAGE) String somePath) {
@@ -97,36 +94,29 @@ public class MyApiController {
 
     /**
      * Test endpoint with a mandatory wskey parameter
-     * @param wskey
-     * @return
+     * Note that SB returns a 400 response when the wskey parameter is not provided. Altenatively without the @RequestParam
+     * API commons key validation will return a 401 if no token is provided.
+     * @param wskey required wskey parameter
+     * @return response
      */
-    @GetMapping(value = "/apikey", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity handleApikeyRequest(@RequestParam(value = "wskey") String wskey) throws ApiKeyValidationException {
-        try {
-            KeyValidationResult validationResult = authConfig.getClientDetailsService().validateApiKeyKeycloakClient(wskey);
-            return new ResponseEntity<>("{ \"API key access\": \"ok\" }", HttpStatus.OK);
-
-        // TODO why do we need to catch this? Is there no support from API commons?
-        } catch (AuthenticationException ae) {
-            LOG.error(ae);
-            return new ResponseEntity<>( "{ \"API key access\": \"unauthorized\" }", HttpStatus.UNAUTHORIZED);
-        }
+    @GetMapping(value = "/myApi/apikey", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> handleApikeyRequest(@RequestParam(value = "wskey") String wskey,
+                                                      HttpServletRequest request) throws ApplicationAuthenticationException {
+        this.authConfig.authorizeReadAccess(request);
+        return new ResponseEntity<>("{ \"API key access\": \"ok\" }", HttpStatus.OK);
     }
 
     /**
-     * Test endpoint with a mandatory authorization token, e.g. for writing access
-     * @param request
-     * @return
+     * Test endpoint with a mandatory authorization token, e.g. for writing access.
+     * Note that SB returns a 400 response when the token is not provided. Alternatively without the @RequestHeader
+     * API commons key validation will return a 401 if no token is provided.
+     * @param authHeader required authorization header
+     * @return response
      */
-    @GetMapping(value = "/tokenWrite", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String handleTokenRequest(HttpServletRequest request) {
-        try {
-            this.authConfig.authorizeWriteAccess(request, Operations.UPDATE);   // Alternatively you can use authorizeReadAccess
-        } catch (ApplicationAuthenticationException e) {
-            // TODO for some reason the GlobalExceptionHandler is not catching this. So as workaround we catch, log and rethrow
-            LOG.error("Failed to authorize write access", e);
-            throw new RuntimeException(e);
-        }
+    @GetMapping(value = "/myApi/token", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String handleTokenRequest(@RequestHeader("authorization") String authHeader,
+                                     HttpServletRequest request) throws ApplicationAuthenticationException {
+        this.authConfig.authorizeWriteAccess(request, Operations.UPDATE);   // Alternatively you can use authorizeReadAccess
         return "{ \"Write access authorized\" }";
     }
 
