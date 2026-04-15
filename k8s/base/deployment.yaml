@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapi-deployment
+  name: api-template-deployment
 spec:
   # selector.matchLabels is provided via Kustomize
   template:
     spec:
       containers:
-        - name: myapi
-          image: europeana/myapi
+        - name: api-template
+          image: europeana/api-template
           ports:
             - containerPort: 8080
           livenessProbe:
@@ -31,4 +31,4 @@ spec:
       volumes:
         - name: secret
           secret:
-            secretName: myapi-secret
+            secretName: api-template-secret
