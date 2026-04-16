@@ -8,8 +8,8 @@ LABEL org.opencontainers.image.vendor="Europeana Foundation" \
 
 WORKDIR /usr/local/tomcat/webapps
 
-# Configure APM and add APM agent
-ENV ELASTIC_APM_VERSION 1.48.1
+# Add APM agent
+ENV ELASTIC_APM_VERSION 1.55.6
 ADD https://repo1.maven.org/maven2/co/elastic/apm/elastic-apm-agent/$ELASTIC_APM_VERSION/elastic-apm-agent-$ELASTIC_APM_VERSION.jar /usr/local/elastic-apm-agent.jar
 
 # Copy unzipped directory so we can mount config files in Kubernetes pod
