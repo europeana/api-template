@@ -22,8 +22,8 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <!-- Best to use the same spring-boot version as defined in API commons -->
-        <spring-boot.version>3.3.5</spring-boot.version>
-        <api-commons-sb3.version>0.1.6</api-commons-sb3.version>
+        <spring-boot.version>3.5.12</spring-boot.version>
+        <api-commons-sb3.version>0.1.7-SNAPSHOT</api-commons-sb3.version>
 
         <springdoc-openapi.version>2.6.0</springdoc-openapi.version>  <!-- Deprecated -->
 

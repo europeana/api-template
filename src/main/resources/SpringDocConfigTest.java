@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * JUnit test to check if OpenAPI and SpringDoc is setup okay
  * @deprecated
  */
+@Disabled
 @SpringBootTest
 @AutoConfigureMockMvc
 @Deprecated

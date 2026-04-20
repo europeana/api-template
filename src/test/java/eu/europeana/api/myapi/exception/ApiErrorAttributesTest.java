@@ -52,6 +52,19 @@ public class ApiErrorAttributesTest {
     }
 
     /**
+     * Test if we get a proper 406 for unsupported formats
+     */
+    @Test
+    public void test406Json() {
+        String path = "/myApi/test";
+        JsonPath response = given().
+                header(HttpHeaders.ACCEPT, MediaType.APPLICATION_PDF_VALUE).get(path).
+                then().contentType(ContentType.JSON).extract().response().jsonPath();
+
+        assertEquals("406", response.getString("status"));
+    }
+
+    /**
      * Test Europeana API exception handled by our MyGlobalExceptionHandler (catch and let Spring Boot generate error)
      * By default we should have no stacktrace or message field
      */
@@ -138,11 +151,11 @@ public class ApiErrorAttributesTest {
 
     /**
      * Test Europeana API exception handled by API commons global exception handler
-     * Check if we get a trace field with stacktrace when profile=debug parameter is added
+     * Check if we get a trace field with stacktrace when profile=trace parameter is added
      */
     @Test
     public void testError2WithStacktrace() {
-        String path = "/error2?param1=value1&profile=test+debug";
+        String path = "/error2?param1=value1&profile=test+trace";
         JsonPath response = given().
                 header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).get(path).
                 then().contentType(ContentType.JSON).extract().response().jsonPath();
