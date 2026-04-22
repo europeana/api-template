@@ -1,14 +1,15 @@
 package eu.europeana.api.myapi.config;
 
 
-import eu.europeana.api.commons_sb3.definitions.oauth.Role;
-import eu.europeana.api.commons_sb3.auth.AuthenticationBuilder;
-import eu.europeana.api.commons_sb3.auth.AuthenticationConfig;
-import eu.europeana.api.commons_sb3.error.exceptions.ApplicationAuthenticationException;
-import eu.europeana.api.commons_sb3.error.i18n.I18nService;
-import eu.europeana.api.commons_sb3.error.i18n.I18nServiceImpl;
-import eu.europeana.api.commons_sb3.oauth2.service.authorization.BaseAuthorizationService;
-import eu.europeana.api.commons_sb3.oauth2.service.impl.EuropeanaClientDetailsService;
+import eu.europeana.api.commons_sb.definitions.oauth.Role;
+import eu.europeana.api.commons_sb.auth.AuthenticationBuilder;
+import eu.europeana.api.commons_sb.auth.AuthenticationConfig;
+import eu.europeana.api.commons_sb.error.exceptions.ApplicationAuthenticationException;
+import eu.europeana.api.commons_sb.error.i18n.I18nService;
+import eu.europeana.api.commons_sb.error.i18n.I18nServiceImpl;
+import eu.europeana.api.commons_sb.oauth2.EuropeanaBeanNames;
+import eu.europeana.api.commons_sb.oauth2.service.authorization.BaseAuthorizationService;
+import eu.europeana.api.commons_sb.oauth2.service.impl.EuropeanaClientDetailsService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -34,8 +35,6 @@ public class AuthConfig extends BaseAuthorizationService {
 
     private static final String BEAN_I18N_SERVICE = "i18nService";
     private static final String BEAN_I18N_MESSAGE_SOURCE = "messageSource";
-
-    private static final String BEAN_CLIENT_DETAILS_SERVICE ="commons_oauth2_europeanaClientDetailsService";
 
     @Value("${auth.api.name:}")
     private String authApiName;
@@ -121,7 +120,7 @@ public class AuthConfig extends BaseAuthorizationService {
     }
 
     /**
-     * Configure the default error messages from API commons with internationalization support (see commons-sb3-error)
+     * Configure the default error messages from API commons with internationalization support (see commons-sb-error)
      * @return MessageSource
      */
     @Bean(name = BEAN_I18N_MESSAGE_SOURCE)
@@ -133,7 +132,7 @@ public class AuthConfig extends BaseAuthorizationService {
     }
 
     /**
-     * Configure the default error messages service from API commons with internationalization support (see commons-sb3-error)
+     * Configure the default error messages service from API commons with internationalization support (see commons-sb-error)
      * @return I18nService
      */
     @Bean(name = BEAN_I18N_SERVICE)
@@ -145,7 +144,7 @@ public class AuthConfig extends BaseAuthorizationService {
      * Configure the API key and token validation client
      * @return EuropeanaClientDetailsService
      */
-    @Bean(name = BEAN_CLIENT_DETAILS_SERVICE)
+    @Bean(name = EuropeanaBeanNames.CLIENT_DETAILS_SERVICE)
     public EuropeanaClientDetailsService getClientDetailsService() {
         EuropeanaClientDetailsService clientDetails = new EuropeanaClientDetailsService();
         if (StringUtils.isEmpty(authTokenEndpoint) || StringUtils.isEmpty(authTokenGrantParams)) {

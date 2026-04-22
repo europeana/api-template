@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Setup SpringDoc swagger console
- * @deprecated we no longer add this to our APIs
+ * @deprecated we no longer need to add this to our APIs
  */
-@Deprecated
+@Deprecated(since = "2025")
 @Configuration
 public class SpringDocConfig {
 

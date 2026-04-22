@@ -3,7 +3,7 @@ package eu.europeana.api.myapi.config;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,14 +22,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test") // to load application-test.yml
-public class CompressionTest {
+class CompressionTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
 
-    public void testEncodingLargeResponse() throws Exception {
+    void testEncodingLargeResponse() throws Exception {
         mockMvc.perform(get("/v3/api-docs")
                 .header(HttpHeaders.ACCEPT_ENCODING, "gzip"))
                 .andExpect(status().is(HttpStatus.OK.value()))
@@ -38,7 +38,7 @@ public class CompressionTest {
     }
 
     @Test
-    public void testNotEncodingSmallResponse() throws Exception {
+    void testNotEncodingSmallResponse() throws Exception {
         mockMvc.perform(get("/myApi/{someRequest}", "123test")
                 .header(HttpHeaders.ACCEPT_ENCODING, "gzip"))
                 .andExpect(status().is(HttpStatus.OK.value()))

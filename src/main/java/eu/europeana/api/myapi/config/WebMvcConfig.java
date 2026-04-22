@@ -33,16 +33,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     /*
-     * Enable content negotiation via path extension (as long as Spring supports it) and set default content type in
-     * case we receive a request without an extension or Accept header
+     * Set default content type in case we receive a request without Accept header
      */
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        // Enable content negotiation via path extension. Note that this is deprecated with Spring 5.2.4,
-        // (see also https://github.com/spring-projects/spring-framework/issues/24179), so it may not work in future
-        // releases
-        configurer.favorPathExtension(true);
-
         // set json as default answer, even if no accept header or extension was provided
         configurer.defaultContentType(MediaType.valueOf(MediaType.APPLICATION_JSON_VALUE), MediaType.APPLICATION_JSON);
     }

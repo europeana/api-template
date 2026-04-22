@@ -1,10 +1,12 @@
 package eu.europeana.api.myapi.exception;
 
-import eu.europeana.api.commons_sb3.error.EuropeanaGlobalExceptionHandler;
+import eu.europeana.api.commons_sb.error.EuropeanaGlobalExceptionHandler;
 import io.micrometer.core.instrument.util.StringEscapeUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +20,8 @@ import java.io.IOException;
  * returned with 500 response
  */
 @ControllerAdvice
+@ComponentScan(basePackages = "eu.europeana.api.commons_sb.error",
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = EuropeanaGlobalExceptionHandler.class))
 public class MyGlobalExceptionHandler extends EuropeanaGlobalExceptionHandler {
 
     private static final Logger LOG = LogManager.getLogger(MyGlobalExceptionHandler.class);
@@ -30,7 +34,7 @@ public class MyGlobalExceptionHandler extends EuropeanaGlobalExceptionHandler {
      */
     @ExceptionHandler
     @SuppressWarnings("findsecbugs:XSS_SERVLET") // we control error message and use StringEscapeUtils so very low risk
-    public void handleMyApiExceptions(MyApiException e, HttpServletResponse response) throws IOException {
+    public void handleMyApiExceptions(SomeOtherException e, HttpServletResponse response) throws IOException {
         // Do some custom processing here and then either rethrow the error or handle it yourself
         // Note that by default the error won't be logged if you handle it yourself!
         LOG.error(e);

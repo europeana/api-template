@@ -1,17 +1,11 @@
 package eu.europeana.api.myapi.web;
 
-import eu.europeana.api.commons_sb3.auth.AuthenticationException;
-import eu.europeana.api.commons_sb3.definitions.oauth.KeyValidationResult;
-import eu.europeana.api.commons_sb3.definitions.oauth.Operations;
-import eu.europeana.api.commons_sb3.error.EuropeanaApiException;
-import eu.europeana.api.commons_sb3.error.exceptions.ApplicationAuthenticationException;
-import eu.europeana.api.commons_sb3.exception.ApiKeyValidationException;
+import eu.europeana.api.commons_sb.error.EuropeanaApiException;
+import eu.europeana.api.commons_sb.error.exceptions.ApplicationAuthenticationException;
 import eu.europeana.api.myapi.config.AuthConfig;
-import eu.europeana.api.myapi.exception.BasicException;
-import eu.europeana.api.myapi.exception.MyApiException;
+import eu.europeana.api.myapi.exception.SomeException;
+import eu.europeana.api.myapi.exception.SomeOtherException;
 import jakarta.validation.constraints.Pattern;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,8 +21,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @Validated
 public class MyApiController {
-
-    private static final Logger LOG = LogManager.getLogger(MyApiController.class);
 
     private static final String MY_REGEX = "^[a-zA-Z0-9]*$";
     private static final String INVALID_REQUEST_MESSAGE = "Invalid parameter.";
@@ -58,6 +50,7 @@ public class MyApiController {
      * @throws RuntimeException thrown always
      */
     @GetMapping(value = "/error1")
+    @SuppressWarnings("java:S112") // we deliberately throw a RuntimeException here
     public void generateRuntimeError(HttpServletRequest request) {
         throw new RuntimeException("This is a runtime error");
     }
@@ -71,9 +64,9 @@ public class MyApiController {
     public void generateBasicError(HttpServletRequest request) throws EuropeanaApiException {
         // TODO currently the trace and/or debug options are not working here. Also we get an unexpected seeAlso field value
         if (request.getParameterMap().containsKey("trace") || request.getParameterMap().containsKey("debug")) {
-            throw new BasicException("This is a basic error with stacktrace", "BasicError stacktrace", "BasicErrorCode");
+            throw new SomeException("This is a basic error with stacktrace", "BasicError stacktrace", "BasicErrorCode");
         }
-        throw new BasicException("This is a basic error. You can see a stacktrace if you add a 'trace' or 'debug' parameter",
+        throw new SomeException("This is a basic error. You can see a stacktrace if you add a 'trace' or 'debug' parameter",
                 "BasicError without stacktrace", "BasicErrorCode");
     }
 
@@ -86,9 +79,9 @@ public class MyApiController {
     public void generateCustomError(HttpServletRequest request) throws EuropeanaApiException {
         // TODO trace option doesn't work anymore
         if (request.getParameterMap().containsKey("trace") || request.getParameterMap().containsKey("debug")) {
-            throw new MyApiException("This is an error with stacktrace", "MyError stacktrace", "MyErrorCode");
+            throw new SomeOtherException("This is an error with stacktrace", "MyError stacktrace", "MyErrorCode");
         }
-        throw new MyApiException("This is an error. You can see a stacktrace if you add a 'trace' or 'debug' parameter",
+        throw new SomeOtherException("This is an error. You can see a stacktrace if you add a 'trace' or 'debug' parameter",
                 "MyError without stacktrace", "MyErrorCode");
     }
 
@@ -116,8 +109,9 @@ public class MyApiController {
     @GetMapping(value = "/myApi/token", produces = MediaType.APPLICATION_JSON_VALUE)
     public String handleTokenRequest(@RequestHeader("authorization") String authHeader,
                                      HttpServletRequest request) throws ApplicationAuthenticationException {
-        this.authConfig.authorizeWriteAccess(request, Operations.UPDATE);   // Alternatively you can use authorizeReadAccess
-        return "{ \"Write access authorized\" }";
+        //this.authConfig.authorizeWriteAccess(request, Operations.UPDATE);   // Alternatively you can use authorizeReadAccess
+        this.authConfig.authorizeReadAccess(request);
+        return "{ \"Token access authorized\" }";
     }
 
 

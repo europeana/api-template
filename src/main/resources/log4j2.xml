@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_COLOR">{FATAL=bg_red, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=blue, TRACE=blue}</Property>
+    </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <!-- Use this pattern for Kubernetes deployments -->
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %level %C:%L [%t] - %m%n" />
+            <!-- <PatternLayout pattern="%d{HH:mm:ss.SSS} %level %C:%L [%t] - %m%n" /> -->
 
             <!-- Optional pattern with color encoding for local debugging -->
-            <!-- <PatternLayout pattern="%d{HH:mm:ss.SSS} %highlight{%level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} %C:%L [%t] %logger{36} - %m%n" /> -->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %highlight{%-5.5level}${LOG_COLOR} %clr{[%-20.20t]}{magenta} %clr{%-40.40C{1.}:%-4L}{cyan} %m%n" />
         </Console>
     </Appenders>
     <Loggers>
