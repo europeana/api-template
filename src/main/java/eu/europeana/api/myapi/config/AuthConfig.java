@@ -33,8 +33,6 @@ public class AuthConfig extends BaseAuthorizationService {
 
     private static final Logger LOG = LogManager.getLogger(AuthConfig.class);
 
-    private static final String BEAN_I18N_SERVICE = "i18nService";
-    private static final String BEAN_I18N_MESSAGE_SOURCE = "messageSource";
 
     @Value("${auth.api.name:}")
     private String authApiName;
@@ -123,7 +121,7 @@ public class AuthConfig extends BaseAuthorizationService {
      * Configure the default error messages from API commons with internationalization support (see commons-sb-error)
      * @return MessageSource
      */
-    @Bean(name = BEAN_I18N_MESSAGE_SOURCE)
+    @Bean(name = EuropeanaBeanNames.I18N_MESSAGE_SOURCE)
     public MessageSource i18nMessagesSource(){
         ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
         source.setBasename("classpath:messages");
@@ -135,7 +133,7 @@ public class AuthConfig extends BaseAuthorizationService {
      * Configure the default error messages service from API commons with internationalization support (see commons-sb-error)
      * @return I18nService
      */
-    @Bean(name = BEAN_I18N_SERVICE)
+    @Bean(name = EuropeanaBeanNames.I18N_SERVICE)
     public I18nService getI18nService() {
         return new I18nServiceImpl(i18nMessagesSource());
     }
