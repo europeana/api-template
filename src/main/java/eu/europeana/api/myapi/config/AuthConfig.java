@@ -7,7 +7,7 @@ import eu.europeana.api.commons_sb.auth.AuthenticationConfig;
 import eu.europeana.api.commons_sb.error.exceptions.ApplicationAuthenticationException;
 import eu.europeana.api.commons_sb.error.i18n.I18nService;
 import eu.europeana.api.commons_sb.error.i18n.I18nServiceImpl;
-import eu.europeana.api.commons_sb.oauth2.EuropeanaBeanNames;
+import eu.europeana.api.commons_sb.definitions.EuropeanaBeanNames;
 import eu.europeana.api.commons_sb.oauth2.service.authorization.BaseAuthorizationService;
 import eu.europeana.api.commons_sb.oauth2.service.impl.EuropeanaClientDetailsService;
 import jakarta.annotation.PostConstruct;
