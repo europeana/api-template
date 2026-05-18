@@ -4,10 +4,10 @@ resources:
 labels:
   - includeSelectors: true
     pairs:
-      app: myapi
+      app: api-template
 
 # expects files to be in the same directory
 secretGenerator:
-  - name: myapi-secret
+  - name: api-template-secret
     files:
       - myapi.user.properties

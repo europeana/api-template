@@ -1,11 +1,13 @@
-# Port for local testing
-server.port: 8086
+spring:
+  web:
+    error:
+      include-message: always            # with on_param only shown when using 'message' option
+      include-stacktrace: on_param       # with on_param only shown when using 'trace' option
+      include-exception: true
 
+# Port for local testing
 server:
-  error:
-    include-message: always            # with on_param only shown when using 'message' option
-    include-stacktrace: on_param       # with on_param only shown when using 'trace' option
-    include-exception: true
+  port: 8086
 
   # Enabling http2 should increase performance in most cases, but best to check if it really does
   # Note that it only works when using https.
@@ -39,7 +41,7 @@ management:
     readinessState:
       enabled: true
 
-# Creates a redirect from /console to /swagger-ui/index.html
+# (Deprecated) Creates a redirect from /console to /swagger-ui/index.html
 springdoc:
   swagger-ui:
     path: /console
