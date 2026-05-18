@@ -28,7 +28,7 @@ public class SpringDocConfig {
 
     /**
      * Generate basic application info
-     * @return
+     * @return OpenAPI object
      */
     @Bean
     public OpenAPI userServiceOpenAPI() {

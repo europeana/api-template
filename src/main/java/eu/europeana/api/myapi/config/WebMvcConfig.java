@@ -20,6 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      * Setup CORS for all GET, HEAD and OPTIONS, requests.
      */
     @Override
+    @SuppressWarnings("java:S5122") // most APIs use allowed-origins *
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")

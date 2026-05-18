@@ -27,6 +27,10 @@ public class MyApiController {
 
     private final AuthConfig authConfig;
 
+    /**
+     * Initialize a new controller
+     * @param authConfig autowired configuration
+     */
     @Autowired
     public MyApiController(AuthConfig authConfig) {
         this.authConfig = authConfig;
@@ -51,13 +55,13 @@ public class MyApiController {
      */
     @GetMapping(value = "/error1")
     @SuppressWarnings("java:S112") // we deliberately throw a RuntimeException here
-    public void generateRuntimeError(HttpServletRequest request) {
+    public void generateRuntimeError() {
         throw new RuntimeException("This is a runtime error");
     }
 
     /**
      * Generate an API exception that is handled by the API commons error functionality
-     * @param request
+     * @param request the current request that is processed
      * @throws EuropeanaApiException thrown always
      */
     @GetMapping(value = "/error2")
@@ -90,7 +94,9 @@ public class MyApiController {
      * Note that SB returns a 400 response when the wskey parameter is not provided. Altenatively without the @RequestParam
      * API commons key validation will return a 401 if no token is provided.
      * @param wskey required wskey parameter
+     * @param request the current request that is processed
      * @return response
+     * @throws ApplicationAuthenticationException when the provided wskey value is not a valid API key
      */
     @GetMapping(value = "/myApi/apikey", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> handleApikeyRequest(@RequestParam(value = "wskey") String wskey,
@@ -104,7 +110,9 @@ public class MyApiController {
      * Note that SB returns a 400 response when the token is not provided. Alternatively without the @RequestHeader
      * API commons key validation will return a 401 if no token is provided.
      * @param authHeader required authorization header
+     * @param request the current request that is processed
      * @return response
+     * @throws ApplicationAuthenticationException when the provided token is not valid
      */
     @GetMapping(value = "/myApi/token", produces = MediaType.APPLICATION_JSON_VALUE)
     public String handleTokenRequest(@RequestHeader("authorization") String authHeader,
