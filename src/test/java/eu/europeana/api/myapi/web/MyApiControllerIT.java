@@ -5,7 +5,6 @@ import eu.europeana.api.commons_sb.auth.service.AuthenticationService;
 import eu.europeana.api.commons_sb.auth.service.TokenResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration test for testing the API key and token functionality of the MyApiController class
  */
-@Disabled
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:myapi.IT.properties")
