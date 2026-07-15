@@ -28,7 +28,6 @@ class CompressionTest {
     private MockMvc mockMvc;
 
     @Test
-
     void testEncodingLargeResponse() throws Exception {
         mockMvc.perform(get("/v3/api-docs")
                 .header(HttpHeaders.ACCEPT_ENCODING, "gzip"))

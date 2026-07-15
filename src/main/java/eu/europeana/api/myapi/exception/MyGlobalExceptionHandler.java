@@ -20,6 +20,8 @@ import java.io.IOException;
  * returned with 500 response
  */
 @ControllerAdvice
+// Load exception handling beans from API commons so we always return errors in json format.
+// Don't load the EuropeanaGlobalExceptionHandler to prevent loading 2 beans (it's already loaded here because of inheritance)
 @ComponentScan(basePackages = "eu.europeana.api.commons_sb.error",
         excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = EuropeanaGlobalExceptionHandler.class))
 public class MyGlobalExceptionHandler extends EuropeanaGlobalExceptionHandler {
