@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: myapi-service
+  name: api-template-service
 spec:
   # selector provided via kustomize
   ports:

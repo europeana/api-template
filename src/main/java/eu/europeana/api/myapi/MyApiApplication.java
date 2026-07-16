@@ -8,7 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 /**
  * Main application. Allows deploying as a war.
  */
-@SpringBootApplication(scanBasePackages = {"eu.europeana.api.myapi", "eu.europeana.api.commons_sb3"})
+@SpringBootApplication(scanBasePackages = {"eu.europeana.api.myapi"})
 public class MyApiApplication extends SpringBootServletInitializer {
 
     /**
