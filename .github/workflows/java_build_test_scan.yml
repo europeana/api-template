@@ -44,15 +44,16 @@ jobs:
       - name: Build and test with Maven
         run: mvn -B verify -DskipITs --file pom.xml
 
+      # TODO this is broken at the moment
+      # Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+      #- name: Update dependency graph
+      #  uses: advanced-security/maven-dependency-submission-action@a64327a7329c9939cf675e458452febe1894a70c #v6.0.1
+
       - name: SonarQube scan
         #uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7.2.1=
         env:
           SONAR_TOKEN: ${{ secrets.API_SONAR_TOKEN }}
-        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-
-      # Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-      - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@a64327a7329c9939cf675e458452febe1894a70c #v6.0.1
+        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.8.0.7211:sonar
 
       - name: Grype scan
         uses: anchore/scan-action@v7.4.2 # This repo uses immutable versions
