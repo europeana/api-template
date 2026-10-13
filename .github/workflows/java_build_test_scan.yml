@@ -5,8 +5,6 @@
 # Known issue: sometimes the Setup JDK will start to complain about "Cache not found for keys: <cache-id>" even though
 # a cache with the specified id is available. The solution is to delete the cache and let it be automatically recreated
 
-# TODO do docker container grype scan!
-
 name: Build, Run Tests and do Sonar and Grype analysis
 
 on: push
@@ -55,11 +53,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.API_SONAR_TOKEN }}
         run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.8.0.7211:sonar
 
+      # TODO do docker container grype scan!
       - name: Grype scan
         uses: anchore/scan-action@v7.4.2 # This repo uses immutable versions
         with:
           path: "."
-          fail-build: true
+          # fail-build: true         # Disabled so we can upload a report
           severity-cutoff: critical
 
       - name: Upload Grype results
