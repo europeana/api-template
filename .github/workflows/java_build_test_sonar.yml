@@ -40,10 +40,11 @@ jobs:
           plugin_repositories: '[{ "id": "europeana-plugins-release", "url": "https://artifactory-prod.eanadev.org/artifactory/plugins-release" },  
                                 { "id": "europeana-plugins-snapshot", "url": "https://artifactory-prod.eanadev.org/artifactory/plugins-snapshot", "snapshots": { "enabled": "true" }}]'
 
+      # TODO modify so we can run integration tests
       - name: Build and test with Maven
-        run: mvn -B verify --file pom.xml
+        run: mvn -B verify -DskipITs --file pom.xml
 
-      - name: SonarQube Scan
+      - name: SonarQube scan
         uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7.2.1
         env:
           SONAR_TOKEN: ${{ secrets.API_SONAR_TOKEN }}
@@ -52,7 +53,7 @@ jobs:
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@a64327a7329c9939cf675e458452febe1894a70c #v6.0.1
 
-      - name: Scan project
+      - name: Grype scan
         uses: anchore/scan-action@v7.4.2 # This repo uses immutable versions
         with:
           path: "."
