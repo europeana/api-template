@@ -54,11 +54,11 @@ jobs:
         run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.8.0.7211:sonar
 
       # TODO do docker container Grype scan!
-      # TODO enable database caching to speed things up?
       - name: Grype scan
         uses: anchore/scan-action@v7.4.2 # This repo uses immutable versions
         with:
           path: "."
+          cache-db: true
           fail-build: false         # Disabled so we can upload a report
           severity-cutoff: critical
 
