@@ -1,6 +1,5 @@
 # This workflow will build a Java project with Maven and cache/restore any dependencies to improve the workflow execution
-# time. Then it will do a Sonar analysis and finally also scan the directory with Grype. The result of the Grype scan is
-# available as an artifact.
+# time. Then it will do a Sonar analysis and finally also scan the directory with Grype.
 
 # Known issue: sometimes the Setup JDK will start to complain about "Cache not found for keys: <cache-id>" even though
 # a cache with the specified id is available. The solution is to delete the cache and let it be automatically recreated
@@ -10,8 +9,7 @@ name: Build, Run Tests and do Sonar and Grype analysis
 on: push
 
 jobs:
-  build:
-
+  build-and-scan:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,11 +19,13 @@ jobs:
           # Disabling shallow clones is recommended for improving the relevancy of reporting
           fetch-depth: 0
 
+      # TODO make java version configurable?
       - name: Set up JDK 21
         uses: actions/setup-java@v6
         with:
           java-version: '21'
           distribution: 'temurin'
+          architecture: x64
           cache: maven
 
       - name: Setup Maven
@@ -41,6 +41,14 @@ jobs:
       # TODO modify so we can run integration tests
       - name: Build and test with Maven
         run: mvn -B verify -DskipITs --file pom.xml
+
+      - run: echo Saving generated jar/war files
+      - name: Upload generated jar/war as "output"
+        uses: actions/upload-artifact@v7
+        with:
+          name: output
+          path: ./**/target/*.[jw]ar
+          retention-days: 1
 
       # TODO this is broken at the moment
       # Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
@@ -62,9 +70,10 @@ jobs:
           fail-build: false         # Disabled so we can upload a report
           severity-cutoff: critical
 
-      - name: Upload Grype scan report
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
+      # TODO fix displaying/uploading scan results
+      #- name: Upload Grype scan report
+      #  uses: github/codeql-action/upload-sarif@v2
+      #  with:
+      #    sarif_file: ${{ steps.scan.outputs.sarif }}
 
 
