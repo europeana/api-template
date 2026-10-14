@@ -61,6 +61,7 @@ jobs:
 
       # TODO do docker container Grype scan!
       - name: Grype scan
+        id: grype-scan
         uses: anchore/scan-action@v7.4.2 # This repo uses immutable versions
         with:
           path: "."
@@ -71,7 +72,7 @@ jobs:
       - name: Upload Grype scan report
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
+          sarif_file: ${{ steps.grype-scan.outputs.sarif }}
 
       # TODO this is broken at the moment
       # Uploads the full dependency graph to GitHub to improve the quality of GitHub's Dependabot alerts
