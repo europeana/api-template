@@ -11,6 +11,10 @@ on: push
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
+    # Permissions key is required for CodeQL SARIF Upload, per the docs:
+    # https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github
+    permissions:
+      security-events: write
 
     steps:
       - name: Check out code
@@ -64,15 +68,14 @@ jobs:
           fail-build: false         # Disabled so we can upload a report
           severity-cutoff: critical
 
-      # TODO fix displaying/uploading scan results
-      #- name: Upload Grype scan report
-      #  uses: github/codeql-action/upload-sarif@v2
-      #  with:
-      #    sarif_file: ${{ steps.scan.outputs.sarif }}
+      - name: Upload Grype scan report
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
 
       # TODO this is broken at the moment
       # Uploads the full dependency graph to GitHub to improve the quality of GitHub's Dependabot alerts
-      - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@a64327a7329c9939cf675e458452febe1894a70c #v6.0.1
+      #- name: Update dependency graph
+      #  uses: advanced-security/maven-dependency-submission-action@a64327a7329c9939cf675e458452febe1894a70c #v6.0.1
 
 
