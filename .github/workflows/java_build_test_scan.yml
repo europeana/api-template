@@ -1,12 +1,16 @@
 # This workflow will build a Java project with Maven and cache/restore any dependencies to improve the workflow execution
-# time. Then it will do a Sonar analysis and finally also scan the directory with Grype.
+# time. Then it will do a Sonar analysis and finally also scan the directory with Grype. Note that Grype only does a
+# scan of the code, not of a Docker image (since that's not built here)
 
-# Known issue: sometimes the Setup JDK will start to complain about "Cache not found for keys: <cache-id>" even though
+# Known issue1: sometimes the Setup JDK will start to complain about "Cache not found for keys: <cache-id>" even though
 # a cache with the specified id is available. The solution is to delete the cache and let it be automatically recreated
 
 name: Build, Run Tests and do Sonar and Grype analysis
 
-on: push
+on:
+  push:
+  schedule:
+      - cron: '0 0 1 * *'
 
 jobs:
   build-and-scan:
@@ -42,7 +46,7 @@ jobs:
           plugin_repositories: '[{ "id": "europeana-plugins-release", "url": "https://artifactory-prod.eanadev.org/artifactory/plugins-release" },  
                                 { "id": "europeana-plugins-snapshot", "url": "https://artifactory-prod.eanadev.org/artifactory/plugins-snapshot", "snapshots": { "enabled": "true" }}]'
 
-      # TODO modify so we can run integration tests
+      # TODO modify so we can run integration tests (safely!)?
       - name: Build and test with Maven
         run: mvn -B verify -DskipITs --file pom.xml
 
@@ -54,29 +58,28 @@ jobs:
           retention-days: 1
 
       - name: SonarQube scan
-        #uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7.2.1=
         env:
           SONAR_TOKEN: ${{ secrets.API_SONAR_TOKEN }}
         run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.8.0.7211:sonar
 
-      # TODO do docker container Grype scan!
+      # Build the container so we can do a complete Grype scan
+      - name: Build the container image
+        run: docker build . --file Dockerfile --tag localbuild/imagetoscan:latest
+
       - name: Grype scan
         id: grype-scan
-        uses: anchore/scan-action@v7.4.2 # This repo uses immutable versions
+        uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
         with:
-          path: "."
+          # path: "."               # To only scan code instead
+          image: "localbuild/imagetoscan:latest"
           cache-db: true
           fail-build: false         # Disabled so we can upload a report
           severity-cutoff: critical
+
+      - name: Print the Grype scan report
+        run: cat ${{ steps.grype-scan.outputs.sarif  }}
 
       - name: Upload Grype scan report
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: ${{ steps.grype-scan.outputs.sarif }}
-
-      # TODO this is broken at the moment
-      # Uploads the full dependency graph to GitHub to improve the quality of GitHub's Dependabot alerts
-      #- name: Update dependency graph
-      #  uses: advanced-security/maven-dependency-submission-action@a64327a7329c9939cf675e458452febe1894a70c #v6.0.1
-
-
