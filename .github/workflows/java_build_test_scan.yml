@@ -1,8 +1,7 @@
 # This workflow will build a Java project with Maven and cache/restore any dependencies to improve the workflow execution
-# time. Then it will do a Sonar analysis and finally also scan the directory with Grype. Note that Grype only does a
-# scan of the code, not of a Docker image (since that's not built here)
+# time. Then it will do a Sonar analysis and finally also create a temporary Docker image and scan that with Grype.
 
-# Known issue1: sometimes the Setup JDK will start to complain about "Cache not found for keys: <cache-id>" even though
+# Known issue: sometimes the Setup JDK will start to complain about "Cache not found for keys: <cache-id>" even though
 # a cache with the specified id is available. The solution is to delete the cache and let it be automatically recreated
 
 name: Build, Run Tests and do Sonar and Grype analysis
@@ -10,15 +9,13 @@ name: Build, Run Tests and do Sonar and Grype analysis
 on:
   push:
   schedule:
-      - cron: '0 0 1 * *'
+      # We trigger a build and scan on the first day of the month so statistics and alerts are updated also for
+      # project's that we don't work on right now.
+      - cron: '0 3 1 * *'
 
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
-    # Permissions key is required for CodeQL SARIF Upload, per the docs:
-    # https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github
-    permissions:
-      security-events: write
 
     steps:
       - name: Check out code
@@ -57,29 +54,12 @@ jobs:
           path: ./**/target/*.[jw]ar
           retention-days: 1
 
-      - name: SonarQube scan
-        env:
-          SONAR_TOKEN: ${{ secrets.API_SONAR_TOKEN }}
-        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.8.0.7211:sonar
-
-      # Build the container so we can do a complete Grype scan
-      - name: Build the container image
-        run: docker build . --file Dockerfile --tag localbuild/imagetoscan:latest
-
-      - name: Grype scan
-        id: grype-scan
-        uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
-        with:
-          # path: "."               # To only scan code instead
-          image: "localbuild/imagetoscan:latest"
-          cache-db: true
-          fail-build: false         # Disabled so we can upload a report
-          severity-cutoff: critical
-
-      - name: Print the Grype scan report
-        run: cat ${{ steps.grype-scan.outputs.sarif  }}
-
-      - name: Upload Grype scan report
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: ${{ steps.grype-scan.outputs.sarif }}
+  security-scan:
+    permissions:
+      contents: read
+      security-events: write
+    uses: europeana/api-actions/.github/workflows/security-scan.yml
+    with:
+      build-docker: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
