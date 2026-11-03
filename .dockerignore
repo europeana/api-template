@@ -1,0 +1,5 @@
+# Send only unzipped war directory to Docker
+**
+!/target/api-template
+**/*.user.properties
+**/*.IT.properties

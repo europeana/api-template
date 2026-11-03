@@ -1,15 +1,15 @@
 package eu.europeana.api.myapi.config;
 
-import eu.europeana.api.myapi.exception.DummyException;
+import eu.europeana.api.myapi.exception.SomeOtherException;
 import eu.europeana.api.myapi.web.MyApiController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpHeaders;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -24,22 +24,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CorsConfigTest {
+class CorsConfigTest {
 
     private static final String TEST_OK = "test-ok";
     private static final String TEST_ERROR = "test-error";
 
-    @MockBean
+    @MockitoBean
     MyApiController myApiController;
 
     @Autowired
     private MockMvc mockMvc;
 
     @BeforeEach
-    private void setup() {
-        when(myApiController.handleMyApiRequest(TEST_OK)).thenReturn("This test works");
-        when(myApiController.handleMyApiRequest(TEST_ERROR)).thenAnswer((Answer) invocation -> {
-            throw new DummyException("a test error");
+    void setup() {
+        when(myApiController.handleSimpleRequest(TEST_OK)).thenReturn("This test works");
+        when(myApiController.handleSimpleRequest(TEST_ERROR)).thenAnswer((Answer) invocation -> {
+            throw new SomeOtherException("a test error");
         });
     }
 
@@ -59,7 +59,7 @@ public class CorsConfigTest {
      * Test if CORS works for GET normal requests and error requests
      */
     @Test
-    public void testCORSGet() throws Exception {
+    void testCORSGet() throws Exception {
         // normal (200 response) request
         testNormalResponse(mockMvc.perform(get("/myApi/{someRequest}", TEST_OK)
                 .header(HttpHeaders.ORIGIN, "https://test.com")));
@@ -73,7 +73,7 @@ public class CorsConfigTest {
      * Test if CORS works for HEAD normal requests and error requests
      */
     @Test
-    public void testCORSHead() throws Exception {
+    void testCORSHead() throws Exception {
         // normal (200 response) request
         testNormalResponse(mockMvc.perform(head("/myApi/{someRequest}", TEST_OK)
                 .header(HttpHeaders.ORIGIN, "https://test.com")));
@@ -87,7 +87,7 @@ public class CorsConfigTest {
      * Test if CORS works for Options (Preflight) request
      */
     @Test
-    public void testCORSOptions() throws Exception {
+    void testCORSOptions() throws Exception {
         // typical Europeana Portal request (with 200 response)
         testNormalResponse(mockMvc.perform(options("/myApi/{someRequest}", TEST_OK)
                 .header(HttpHeaders.CONNECTION, "keep-alive")

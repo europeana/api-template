@@ -2,7 +2,7 @@ package eu.europeana.api.myapi.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,13 +16,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ActuatorTest {
+class ActuatorTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void testActuatorInfo() throws Exception {
+    void testActuatorInfo() throws Exception {
         MvcResult result = mockMvc.perform(get("/actuator/info"))
                 .andExpect(status().is(HttpStatus.OK.value())).andReturn();
         // also check that there are contents
@@ -30,7 +30,7 @@ public class ActuatorTest {
     }
 
     @Test
-    public void testActuatorHealth() throws Exception {
+   void testActuatorHealth() throws Exception {
         MvcResult result = mockMvc.perform(get("/actuator/health"))
                 .andExpect(status().is(HttpStatus.OK.value())).andReturn();
         // also check that there are contents
@@ -38,7 +38,7 @@ public class ActuatorTest {
     }
 
     @Test
-    public void testActuatorHealthLiveness() throws Exception {
+    void testActuatorHealthLiveness() throws Exception {
         MvcResult result = mockMvc.perform(get("/actuator/health/liveness"))
                 .andExpect(status().is(HttpStatus.OK.value())).andReturn();
         // also check that there are contents
@@ -46,7 +46,7 @@ public class ActuatorTest {
     }
 
     @Test
-    public void testActuatorHealthReadiness() throws Exception {
+    void testActuatorHealthReadiness() throws Exception {
         MvcResult result = mockMvc.perform(get("/actuator/health/readiness"))
                 .andExpect(status().is(HttpStatus.OK.value())).andReturn();
         // also check that there are contents

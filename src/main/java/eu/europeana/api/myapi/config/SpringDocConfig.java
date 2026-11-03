@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Setup SpringDoc swagger console
+ * @deprecated we no longer need to add this to our APIs
  */
+@Deprecated(since = "2025")
 @Configuration
 public class SpringDocConfig {
 
@@ -26,7 +28,7 @@ public class SpringDocConfig {
 
     /**
      * Generate basic application info
-     * @return
+     * @return OpenAPI object
      */
     @Bean
     public OpenAPI userServiceOpenAPI() {
@@ -38,7 +40,7 @@ public class SpringDocConfig {
                         .license(new License().name("EUPL 1.2").url("https://www.eupl.eu")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Documentation")
-                        .url("https://pro.europeana.eu/page/intro#general"));
+                        .url("https://api.europeana.eu"));
     }
 
 }
