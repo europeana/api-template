@@ -58,7 +58,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    uses: europeana/api-template/.github/workflows/security-scan.yml@g
+    uses: europeana/api-template/.github/workflows/security-scan.yml@test_github_actions
     with:
       build-docker: true
     secrets:
