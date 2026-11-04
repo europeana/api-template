@@ -14,7 +14,7 @@ on:
       - cron: '0 3 1 * *'
 
 jobs:
-  build-and-scan:
+  check-out-build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -55,6 +55,7 @@ jobs:
           retention-days: 1
 
   security-scan:
+    needs: check-out-build-and-test
     permissions:
       contents: read
       security-events: write
