@@ -61,5 +61,5 @@ jobs:
     uses: europeana/api-template/.github/workflows/security_scan.yml@test_github_actions
     with:
       build-docker: true
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+    #secrets:
+    #  token: ${{ secrets.GITHUB_TOKEN }}
