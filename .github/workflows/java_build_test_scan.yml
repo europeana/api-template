@@ -7,15 +7,26 @@
 name: Build, Run Tests and do Sonar and Grype analysis
 
 on:
-  push:
-  schedule:
-      # We trigger a build and scan on the first day of the month so statistics and alerts are updated also for
-      # project's that we don't work on right now.
-      - cron: '0 3 1 * *'
+  workflow_call:
+    inputs:
+      java-version:
+        description: 'JDK version to use'
+        type: number
+        required: false
+        default: 21
+      scan-docker:
+        description: 'Generate and scan Docker image'
+        type: boolean
+        required: false
+        default: true
 
 jobs:
-  check-out-build-and-test:
+  build-test-scan:
     runs-on: ubuntu-latest
+    # Permissions key is required for CodeQL SARIF Upload, per the docs:
+    # https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github
+    permissions:
+      security-events: write
 
     steps:
       - name: Check out code
@@ -24,11 +35,10 @@ jobs:
           # Disabling shallow clones is recommended for improving the relevancy of reporting
           fetch-depth: 0
 
-      # TODO make java version configurable?
-      - name: Set up JDK 21
+      - name: Set up JDK
         uses: actions/setup-java@v6
         with:
-          java-version: '21'
+          java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
           architecture: x64
           cache: maven
@@ -50,21 +60,53 @@ jobs:
       - name: Upload generated jar/war as "output"
         uses: actions/upload-artifact@v7
         with:
-          name: build-test-output
-          # Make build jar/war and test results available to security-scan workflow
-          path: |
-            ./**/target/*.[jw]ar
-            ./**/target/classes
-            ./**/target/test-classes
-            ./**/target/surefire-reports
+          name: output
+          # Make build jar/war available as job result
+          path: ./**/target/*.[jw]ar
           retention-days: 1
 
-  security-scan:
-    needs: check-out-build-and-test
-    secrets: inherit
-    permissions:
-      contents: read
-      security-events: write
-    uses: europeana/api-template/.github/workflows/security_scan.yml@test_github_actions
-    with:
-      build-docker: true
+      - name: SonarQube scan
+        env:
+          SONAR_TOKEN: ${{ secrets.API_SONAR_TOKEN }}
+        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.8.0.7211:sonar
+
+
+      # Build the Docker container so we can do a complete Grype scan of it
+      - name: Build the Docker container
+        if: inputs.build-docker == true
+        run: docker build . --file Dockerfile --tag localbuild/imagetoscan:latest
+
+      - name: Grype scan of Docker container
+        if: inputs.build-docker == true
+        id: grype-scan-docker
+        uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
+        with:
+          image: "localbuild/imagetoscan:latest"
+          cache-db: true
+          fail-build: false         # Disabled so we can upload a report
+          severity-cutoff: critical
+
+      - name: Grype scan of project files
+        if: inputs.build-docker == false
+        id: grype-scan-project
+        uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
+        with:
+          path: "."
+          cache-db: true
+          fail-build: false         # Disabled so we can upload a report
+          severity-cutoff: critical
+
+      # Scan results are visible to Europeana staff with write access to the repo.
+      # See GitHub's UI "Security and quality -> Code scanning". Don't forget to select the specific branch
+      # you're working in (default view only shows master branch)
+      - name: Upload Grype scan report for Docker
+        if: inputs.build-docker == true
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ steps.grype-scan-docker.outputs.sarif }}
+
+      - name: Upload Grype scan report for project
+        if: inputs.build-docker == false
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ steps.grype-scan-project.outputs.sarif }}

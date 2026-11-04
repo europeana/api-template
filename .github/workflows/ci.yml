@@ -1,0 +1,20 @@
+# This workflow will run our general continues integration steps; check-out, build, test, sonar scan and grype scan.
+# The used Java version is configurable (default 21) as well as whether to let Grype scan the projects docker container
+# (default option) or let is only scan the project's files.
+# Any built jar/war will be made available (for 1 day)
+name: Build, Run Tests and do Sonar and Grype analysis
+
+on:
+  push:
+  schedule:
+    # We trigger a build and scan on the first day of the month so statistics and alerts are updated also for
+    # project's that we don't work on right now.
+    - cron: '0 3 1 * *'
+
+jobs:
+  build-test-scan:
+    secrets: inherit
+    uses: europeana/api-template/.github/workflows/java_build_test_scan@test_github_actions
+    with:
+      java-version: 21
+      scan-docker: true
