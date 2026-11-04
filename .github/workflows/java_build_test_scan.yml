@@ -21,7 +21,7 @@ on:
         default: true
 
 jobs:
-  build-test-scan:
+  build-test:
     runs-on: ubuntu-latest
     # Permissions key is required for CodeQL SARIF Upload, per the docs:
     # https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github
@@ -73,11 +73,11 @@ jobs:
 
       # Build the Docker container so we can do a complete Grype scan of it
       - name: Build the Docker container
-        if: inputs.build-docker == true
+        if: inputs.scan-docker == true
         run: docker build . --file Dockerfile --tag localbuild/imagetoscan:latest
 
       - name: Grype scan of Docker container
-        if: inputs.build-docker == true
+        if: inputs.scan-docker == true
         id: grype-scan-docker
         uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
         with:
@@ -87,7 +87,7 @@ jobs:
           severity-cutoff: critical
 
       - name: Grype scan of project files
-        if: inputs.build-docker == false
+        if: inputs.scan-docker == false
         id: grype-scan-project
         uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
         with:
@@ -100,13 +100,13 @@ jobs:
       # See GitHub's UI "Security and quality -> Code scanning". Don't forget to select the specific branch
       # you're working in (default view only shows master branch)
       - name: Upload Grype scan report for Docker
-        if: inputs.build-docker == true
+        if: inputs.scan-docker == true
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: ${{ steps.grype-scan-docker.outputs.sarif }}
 
       - name: Upload Grype scan report for project
-        if: inputs.build-docker == false
+        if: inputs.scan-docker == false
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: ${{ steps.grype-scan-project.outputs.sarif }}
