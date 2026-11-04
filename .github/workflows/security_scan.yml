@@ -16,6 +16,19 @@ jobs:
   build-and-scan:
     runs-on: ubuntu-latest
     steps:
+      # We need to check-out files again because this is a separate workflow
+      - name: Check out code
+        uses: actions/checkout@v7
+        with:
+          # Disabling shallow clones is recommended for improving the relevancy of reporting
+          fetch-depth: 0
+
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: build-test-output
+          path: target
+
       - name: SonarQube scan
         env:
           SONAR_TOKEN: ${{ secrets.API_SONAR_TOKEN }}

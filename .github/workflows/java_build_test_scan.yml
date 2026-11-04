@@ -50,10 +50,9 @@ jobs:
       - name: Upload generated jar/war as "output"
         uses: actions/upload-artifact@v7
         with:
-          name: output
+          name: build-test-output
           # Make build jar/war and test results available to security-scan workflow
           path: |
-            ./**/pom.xml
             ./**/target/*.[jw]ar
             ./**/target/classes
             ./**/target/test-classes
