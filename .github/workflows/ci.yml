@@ -14,7 +14,7 @@ on:
 jobs:
   build-test-scan:
     secrets: inherit
-    uses: europeana/api-template/.github/workflows/java_build_test_scan@test_github_actions
+    uses: europeana/api-template/.github/workflows/java_build_test_scan.yml@test_github_actions
     with:
       java-version: 21
       scan-docker: true
