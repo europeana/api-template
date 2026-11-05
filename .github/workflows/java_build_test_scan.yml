@@ -55,8 +55,8 @@ jobs:
                                 { "id": "europeana-plugins-snapshot", "url": "https://artifactory-prod.eanadev.org/artifactory/plugins-snapshot", "snapshots": { "enabled": "true" }}]'
 
       # TODO modify so we can run integration tests (safely!)?
-      - name: Build and test with Maven (with code coverage)
-        run: mvn -B jacoco:prepare-agent verify jacoco:report -DskipITs --file pom.xml
+      - name: Build and test with Maven (with test coverage)
+        run: mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report -DskipITs --file pom.xml
 
       - name: Upload generated jar/war as "output"
         uses: actions/upload-artifact@v7
