@@ -1,5 +1,6 @@
 # This workflow will build a Java project with Maven and cache/restore any dependencies to improve the workflow execution
-# time. Then it will do a Sonar analysis and finally also create a temporary Docker image and scan that with Grype.
+# time. Then it will do a Sonar analysis and finally do a Grype scan of either the project files or the project's Docker
+# image (new image will be built as part of the job).
 
 # Known issue: sometimes the Setup JDK will start to complain about "Cache not found for keys: <cache-id>" even though
 # a cache with the specified id is available. The solution is to delete the cache and let it be automatically recreated
@@ -21,7 +22,7 @@ on:
         default: true
 
 jobs:
-  build-test:
+  build-test-scan:
     runs-on: ubuntu-latest
     # Permissions key is required for CodeQL SARIF Upload, per the docs:
     # https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github
@@ -54,8 +55,8 @@ jobs:
                                 { "id": "europeana-plugins-snapshot", "url": "https://artifactory-prod.eanadev.org/artifactory/plugins-snapshot", "snapshots": { "enabled": "true" }}]'
 
       # TODO modify so we can run integration tests (safely!)?
-      - name: Build and test with Maven
-        run: mvn -B verify -DskipITs --file pom.xml
+      - name: Build and test with Maven (with code coverage)
+        run: mvn -B jacoco:prepare-agent verify jacoco:report -DskipITs --file pom.xml
 
       - name: Upload generated jar/war as "output"
         uses: actions/upload-artifact@v7
